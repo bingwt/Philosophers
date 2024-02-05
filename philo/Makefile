@@ -6,15 +6,16 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
-#    Updated: 2024/02/05 09:14:12 by btan             ###   ########.fr        #
+#    Updated: 2024/02/05 09:59:46 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-INCLUDES = includes
+INCLUDES = .
 
-SRCS = srcs/main.c \
+SRCS = philo_utils.c \
+	   main.c
 
 CC = cc
 
@@ -33,4 +34,7 @@ clean:
 fclean: clean
 	rm -rf $(NAME)
 
-re: all clean fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re
