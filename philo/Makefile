@@ -1,0 +1,36 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
+#    Updated: 2024/02/05 09:14:12 by btan             ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = philo
+
+INCLUDES = includes
+
+SRCS = srcs/main.c \
+
+CC = cc
+
+CFLAGS = -Wall -Wextra -Werror -g
+
+OBJECTS = $(SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME):
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) -I$(INCLUDES)
+
+clean:
+	rm -rf $(OBJECTS) $(NAME).a
+
+fclean: clean
+	rm -rf $(NAME)
+
+re: all clean fclean
