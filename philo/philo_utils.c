@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/05 11:30:21 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/05 16:57:20 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	check_philo(t_philo *philo)
 		printf("%d is thinking\n", philo->pos);
 	if (philo->state == 4)
 		printf("%d is dead\n", philo->pos);
+	printf("Phil %d has %d fork(s)\n", philo->pos, philo->forks);
 }
 
 void	test(t_pp *pp)
