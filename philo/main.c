@@ -6,41 +6,59 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/05 10:03:26 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/05 11:30:40 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philosophers(int no_of_phils, int ttd, int tte, int tts, int must_eat)
+t_philo	*init_phils(t_pp *pp)
 {
-	printf("Philosophers  : %d\n", no_of_phils);
-	printf("Time to die   : %d\n", ttd);
-	printf("Time to tte   : %d\n", tte);
-	printf("Time to sleep : %d\n", tts);
-	printf("Times to eat  : %d\n", must_eat);
+	t_philo *phils;
+	int		i;
+	
+	phils = ft_calloc(pp->phils + 1, sizeof(t_philo));
+	i = 0;
+	while (i < pp->phils)
+	{
+		phils[i].pos = i + 1;
+		phils[i].state = 0;
+		i++;
+	}
+	return (phils);
 }
+
+//void	sim(t_pp *pp)
+//{
+//	suseconds_t start;
+//	struct timeval	current;
+//
+//	current.tv_usec = 0;
+//	while ()
+//}
 
 int	main(int argc, char **argv)
 {
-	int	no_of_phils;
-	int	ttd;
-	int	tte;
-	int	tts;
-	int	must_eat;
+	t_pp	pp;
+	t_philo	*phils;
 
-	if (argc != 6)
+	if (argc != 5)
 	{
 		printf("Please provide 5 arguments!");
 		return (1);
 	}
-
-	no_of_phils = ft_atoi(argv[1]);
-	ttd = ft_atoi(argv[2]);
-	tte = ft_atoi(argv[3]);
-	tts = ft_atoi(argv[4]);
-	must_eat = ft_atoi(argv[5]);
-
-	philosophers(no_of_phils, ttd, tte, tts, must_eat);
+	pp.phils = ft_atoi(argv[1]);
+	pp.ttd = ft_atoi(argv[2]);
+	pp.tte = ft_atoi(argv[3]);
+	pp.tts = ft_atoi(argv[4]);
+	//pp.must_eat = ft_atoi(argv[5]);
+	pp.forks = pp.phils;
+	test(&pp);
+	phils = init_phils(&pp);
+	while (phils->pos)
+	{
+		check_philo(phils);
+		phils++;
+	}
 	return (0);
 }
