@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/05 11:30:40 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/05 13:09:12 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,23 @@ t_philo	*init_phils(t_pp *pp)
 	{
 		phils[i].pos = i + 1;
 		phils[i].state = 0;
+		phils[i].ttd = pp->ttd;
+		phils[i].must_eat = pp->must_eat;
 		i++;
 	}
 	return (phils);
 }
 
-//void	sim(t_pp *pp)
-//{
-//	suseconds_t start;
-//	struct timeval	current;
-//
-//	current.tv_usec = 0;
-//	while ()
-//}
+void	sim(t_philo **phils)
+{
+	while ((*phils)->ttd != 0)
+	{
+		usleep(1000);
+		(*phils)->ttd--;
+		check_philo(*phils);
+	}
+	printf("Dieded");
+}
 
 int	main(int argc, char **argv)
 {
@@ -55,10 +59,11 @@ int	main(int argc, char **argv)
 	pp.forks = pp.phils;
 	test(&pp);
 	phils = init_phils(&pp);
-	while (phils->pos)
-	{
-		check_philo(phils);
-		phils++;
-	}
+//	while (phils->pos)
+//	{
+//		check_philo(phils);
+//		phils++;
+//	}
+	sim(&phils);
 	return (0);
 }

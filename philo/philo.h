@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/05 11:31:10 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/05 13:02:05 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_philosopher
 {
 	int	pos;
 	int	state;
+	int	ttd;
+	int	must_eat;
 }	t_philo;
 
 int		ft_atoi(const char *str);
