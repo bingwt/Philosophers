@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/05 16:57:20 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/06 11:33:53 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,16 @@ void	state_change(int phil, int state)
 void	check_philo(t_philo *philo)
 {
 	if (philo->state == 0)
-		printf("%d is sleeping\n", philo->pos);
+		printf("%d is sleeping\n", philo->num);
 	if (philo->state == 1)
-		printf("%d has taken a fork\n", philo->pos);
+		printf("%d has taken a fork\n", philo->num);
 	if (philo->state == 2)
-		printf("%d is eating\n", philo->pos);
+		printf("%d is eating\n", philo->num);
 	if (philo->state == 3)
-		printf("%d is thinking\n", philo->pos);
+		printf("%d is thinking\n", philo->num);
 	if (philo->state == 4)
-		printf("%d is dead\n", philo->pos);
-	printf("Phil %d has %d fork(s)\n", philo->pos, philo->forks);
+		printf("%d is dead\n", philo->num);
+	printf("Phil %d has %d fork(s)\n", philo->num, philo->forks);
 }
 
 void	test(t_pp *pp)
