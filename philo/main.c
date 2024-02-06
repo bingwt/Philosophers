@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 12:43:34 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/06 15:29:18 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,19 @@ int	sub_routine(void *args)
 		state_change(phils->num, 2);
 		usleep(phils->pp->tte * 1000);
 		phils->must_eat--;
-		phils->forks = 0;
-		phils->pp->forks += 2;
 		phils->ttd = phils->pp->ttd;
+		phils->state = 0;
+		state_change(phils->num, 0);
 	}
 	else
 	{
 		phils->state = 3;
 		state_change(phils->num, 3);
+	}
+	while (phils->forks > 0)
+	{
+		phils->forks--;
+		phils->pp->forks++;
 	}
 	if (phils->ttd <= 0)
 	{
@@ -85,25 +90,20 @@ int	sub_routine(void *args)
 		state_change(phils->num, 4);
 		exit(0);
 	}
-	phils->state = 0;
-	state_change(phils->num, 0);
-	phils->ttd--;
 	return (1);
 }
 
-// void *death_timer_thread(void *args)
-// {
-// 	t_philo *phils = (t_philo *)args;
-	
-// 	while (phils->ttd > 0)
-// 	{
-// 		usleep(1000);
-// 		phils->ttd--;
-// 		// death_timer(phils);
-// 	}
-	
-// 	return NULL;
-// }
+ void *death_timer_thread(void *args)
+{
+	t_philo *phils = (t_philo *)args;
+
+	while (phils->ttd > 0)
+	{
+		usleep(1000);
+		phils->ttd--;
+	}
+	return NULL;
+}
 
 // void routine(t_philo **phils)
 // {
@@ -134,22 +134,25 @@ int	sub_routine(void *args)
 void routine(t_philo **phils)
 {
 	int i;
-	// int *thread_return;
+	int *threads;
+	int	*death_threads;
 
 	i = 0;
-	// thread_return = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
+	threads = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
+	death_threads = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
 	while (i < (*phils)->pp->phils)
 	{
 		printf("Philosopher number %d\n", (*phils)[i].num);
-		// thread_return[i] = pthread_create(&phils[i]->thread, NULL, (void *) sub_routine, (void *)&(*phils)[i]);
-		sub_routine(&(*phils)[i]);
+		threads[i] = pthread_create(&(*phils)[i].thread, NULL, (void *) sub_routine, (void *)&(*phils)[i]);
+		death_threads[i] = pthread_create(&(*phils)[i].death_thread, NULL, (void *) death_timer_thread, (void *)&(*phils)[i]);
+		//sub_routine(&(*phils)[i]);
 		i++;
 	}
 	i = 0;
 	while (i < (*phils)->pp->phils)
 	{
-		// pthread_join(phils[i]->thread, NULL);
-		i++;
+		pthread_join((*phils)[i++].thread, NULL);
+		pthread_join((*phils)[i++].death_thread, NULL);
 	}
 }
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 11:33:59 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/06 14:34:05 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philosopher
 	int			must_eat;
 	int			forks;
 	pthread_t	thread;
+	pthread_t	death_thread;
 	t_pp		*pp;
 }	t_philo;
 
