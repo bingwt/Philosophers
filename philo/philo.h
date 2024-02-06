@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 14:34:05 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/06 15:38:09 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@
 
 typedef struct s_philo_params
 {
-	int	phils;
-	int	ttd;
-	int	tte;
-	int	tts;
-	int	must_eat;
-	int	forks;
+	int				phils;
+	int				ttd;
+	int				tte;
+	int				tts;
+	int				must_eat;
+	int				forks;
+	pthread_mutex_t	mutex;
 }	t_pp;
 
 typedef struct s_philosopher

@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 15:29:18 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/06 15:42:35 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ int	sub_routine(void *args)
 	while (phils->pp->forks > 0 && phils->forks != 2 \
 	&& phils->must_eat && phils->ttd > 0)
 	{
+		pthread_mutex_lock(&phils->pp->mutex);
 		phils->pp->forks--;
 		phils->forks++;
 		state_change(phils->num, 1);
+		pthread_mutex_unlock(&phils->pp->mutex);
 	}
 	if (phils->forks == 2 && phils->must_eat && phils->ttd > 0)
 	{
@@ -81,8 +83,10 @@ int	sub_routine(void *args)
 	}
 	while (phils->forks > 0)
 	{
+		pthread_mutex_lock(&phils->pp->mutex);
 		phils->forks--;
 		phils->pp->forks++;
+		pthread_mutex_unlock(&phils->pp->mutex);
 	}
 	if (phils->ttd <= 0)
 	{
@@ -99,8 +103,10 @@ int	sub_routine(void *args)
 
 	while (phils->ttd > 0)
 	{
+		pthread_mutex_lock(&phils->pp->mutex);
 		usleep(1000);
 		phils->ttd--;
+		pthread_mutex_unlock(&phils->pp->mutex);
 	}
 	return NULL;
 }
@@ -171,6 +177,7 @@ int	main(int argc, char **argv)
 	pp.tts = ft_atoi(argv[4]);
 	pp.must_eat = ft_atoi(argv[5]);
 	pp.forks = pp.phils;
+	pthread_mutex_init(&pp.mutex, NULL);
 	//test(&pp);
 	phils = init_phils(&pp);
 //	while (phils->num)
