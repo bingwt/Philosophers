@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
-#    Updated: 2024/02/05 09:59:46 by btan             ###   ########.fr        #
+#    Updated: 2024/02/06 13:15:45 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS = philo_utils.c \
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 OBJECTS = $(SRCS:.c=.o)
 
@@ -36,5 +36,8 @@ fclean: clean
 
 
 re: fclean all
+
+debug: CFLAGS += -g
+debug: re
 
 .PHONY: all clean fclean re
