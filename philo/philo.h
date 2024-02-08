@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 15:38:09 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/08 14:16:58 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+typedef enum s_actions
+{
+	SLEEP,
+	THINK,
+	EAT
+}	t_actions;
+
+typedef enum s_status
+{
+	DEAD,
+	ALIVE
+}	t_status;
 
 typedef struct s_philo_params
 {
@@ -44,7 +57,10 @@ typedef struct s_philosopher
 
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t nmemb, size_t size);
-void	state_change(int phil, int state);
+
+void	philo_actions(t_philo *philo, t_actions actions);
+void	philo_status(t_philo *philo, t_status status);
+
 void	check_philo(t_philo *philo);
 void	test(t_pp *pp);
 

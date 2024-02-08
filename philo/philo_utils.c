@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 11:33:53 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/08 14:16:52 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,6 @@ void	*ft_calloc(size_t nmemb, size_t size)
 			ptr[(size--) - 1] = '\0';
 	}
 	return (arr);
-}
-
-void	state_change(int phil, int state)
-{
-	struct timeval	timestamp;
-
-	gettimeofday(&timestamp, NULL);
-	if (state == 0)
-		printf("%ld %d is sleeping\n", timestamp.tv_usec, phil);
-	if (state == 1)
-		printf("%ld %d has taken a fork\n", timestamp.tv_usec, phil);
-	if (state == 2)
-		printf("%ld %d is eating\n", timestamp.tv_usec, phil);
-	if (state == 3)
-		printf("%ld %d is thinking\n", timestamp.tv_usec, phil);
-	if (state == 4)
-		printf("%ld %d died\n", timestamp.tv_usec, phil);
 }
 
 void	check_philo(t_philo *philo)

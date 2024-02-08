@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/06 15:42:35 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/08 16:14:07 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,46 +97,6 @@ int	sub_routine(void *args)
 	return (1);
 }
 
- void *death_timer_thread(void *args)
-{
-	t_philo *phils = (t_philo *)args;
-
-	while (phils->ttd > 0)
-	{
-		pthread_mutex_lock(&phils->pp->mutex);
-		usleep(1000);
-		phils->ttd--;
-		pthread_mutex_unlock(&phils->pp->mutex);
-	}
-	return NULL;
-}
-
-// void routine(t_philo **phils)
-// {
-// 	int i;
-// 	pthread_t phil_thread_id;
-// 	pthread_t death_timer_thread_id;
-	
-// 	i = 0;
-// 	while (i < (*phils)->pp->phils)
-// 	{
-// 		printf("Philosopher number %d\n", (*phils)[i].num);
-// 		sub_routine(&(*phils)[i]);
-// 		i++;
-// 	}
-	
-// 	pthread_create(&death_timer_thread_id, NULL, death_timer_thread, (void *)&(*phils)[i]);
-	
-// 	i = 0;
-// 	while (i < (*phils)->pp->phils)
-// 	{
-// 		pthread_join(phils[i]->thread, NULL);
-// 		i++;
-// 	}
-	
-// 	pthread_join(death_timer_thread_id, NULL);
-// }
-
 void routine(t_philo **phils)
 {
 	int i;
@@ -145,21 +105,16 @@ void routine(t_philo **phils)
 
 	i = 0;
 	threads = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
-	death_threads = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
 	while (i < (*phils)->pp->phils)
 	{
 		printf("Philosopher number %d\n", (*phils)[i].num);
 		threads[i] = pthread_create(&(*phils)[i].thread, NULL, (void *) sub_routine, (void *)&(*phils)[i]);
-		death_threads[i] = pthread_create(&(*phils)[i].death_thread, NULL, (void *) death_timer_thread, (void *)&(*phils)[i]);
 		//sub_routine(&(*phils)[i]);
 		i++;
 	}
 	i = 0;
 	while (i < (*phils)->pp->phils)
-	{
 		pthread_join((*phils)[i++].thread, NULL);
-		pthread_join((*phils)[i++].death_thread, NULL);
-	}
 }
 int	main(int argc, char **argv)
 {
