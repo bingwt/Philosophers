@@ -6,48 +6,58 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:39:28 by btan              #+#    #+#             */
-/*   Updated: 2024/02/08 14:26:06 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/12 19:05:42 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philo_action(t_philo *philo, t_actions actions)
+void	philo_action(t_philo *philo, t_action action)
 {
-	struct timeval	timestamp;
+	struct timeval	current;
+	time_t			timestamp;
 
-	gettimeofday(&timestamp, NULL);
-	if (actions == (t_actions) SLEEP)
+	gettimeofday(&current, NULL);
+	timestamp = (current.tv_sec - philo->pp->start) * 1000;
+	pthread_mutex_lock(&philo->pp->mutex);
+	if (philo->state != action)
 	{
-		phil->state = 0;
-		printf("%ld %d is sleeping\n", timestamp.tv_usec / 1000, phil);
+		philo->state = action;
+		if (action == (t_action) SLEEP)
+		{
+			printf("%ld %d is sleeping\n", timestamp, philo->num);
+			usleep(philo->pp->tts * 1000);
+			if (philo->has_eaten)
+			{
+				philo->has_eaten = 0;
+				philo->ttd = philo->pp->ttd;
+			}
+		}
+		if (action == (t_action) THINK)
+			printf("%ld %d is thinking\n", timestamp, philo->num);
+		if (action == (t_action) EAT)
+		{
+			printf("%ld %d is eating\n", timestamp, philo->num);
+			usleep(philo->pp->tte * 1000);
+			if (philo->pp->unique_eats < 5 && !philo->has_eaten)
+				philo->pp->unique_eats++;
+			philo->has_eaten = 1;
+			philo->must_eat--;
+		}
+		philo->ttd--;
 	}
-	if (actions == (t_actions) THINK)
-	{
-		phil->state = 1;
-		printf("%ld %d is thinking\n", timestamp.tv_usec / 1000, phil);
-	}
-	if (actions == (t_actions) EAT)
-	{
-		phil->state = 2;
-		printf("%ld %d is eating\n", timestamp.tv_usec / 1000, phil);
-	}
+	pthread_mutex_unlock(&philo->pp->mutex);
 }
 
-void	philo_status(t_philo *philo, t_actions status)
+void	philo_status(t_philo *philo, t_status status)
 {
-	struct timeval	timestamp;
+	struct timeval	current;
+	time_t			timestamp;
 
-	gettimeofday(&timestamp, NULL);
+	gettimeofday(&current, NULL);
+	timestamp = (current.tv_sec - philo->pp->start) * 1000;
 	if (status == (t_status) DEAD)
-		printf("%ld %d died\n", timestamp.tv_usec / 1000, phil);
+		printf("%ld %d died\n", timestamp, philo->num);
 	if (status == (t_status) ALIVE)
-		printf("%ld %d is alive\n", timestamp.tv_usec / 1000, phil);
-}
-
-int	main()
-{
-	philo_action(NULL, (t_actions) SLEEP);
-	philo_action(NULL, (t_actions) THINK);
-	philo_action(NULL, (t_actions) EAT);
+		printf("%ld %d is alive\n", timestamp, philo->num);
 }

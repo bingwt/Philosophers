@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/08 14:16:52 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/11 15:08:05 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,31 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-void	check_philo(t_philo *philo)
+int	available_forks(t_philo *philo)
 {
-	if (philo->state == 0)
-		printf("%d is sleeping\n", philo->num);
-	if (philo->state == 1)
-		printf("%d has taken a fork\n", philo->num);
-	if (philo->state == 2)
-		printf("%d is eating\n", philo->num);
-	if (philo->state == 3)
-		printf("%d is thinking\n", philo->num);
-	if (philo->state == 4)
-		printf("%d is dead\n", philo->num);
-	printf("Phil %d has %d fork(s)\n", philo->num, philo->forks);
+	int	forks;
+	pthread_mutex_lock(&philo->pp->mutex);
+	forks = philo->pp->forks;
+	pthread_mutex_unlock(&philo->pp->mutex);
+	return (forks);
+}
+
+int	check_philo(t_philo *philo)
+{
+	usleep(1000);
+	philo->ttd--;
+	if (philo->ttd == 0)
+	{
+		philo_status(philo, (t_status) DEAD);
+		return (0);
+	}
+	// printf("%d\n", philo->pp->unique_eats);
+	if (philo->pp->unique_eats == philo->pp->phils)
+	{
+		printf("All philosophers have eaten\n");
+		return (0);
+	}
+	return (1);
 }
 
 void	test(t_pp *pp)
@@ -77,5 +89,4 @@ void	test(t_pp *pp)
 	printf("Time to sleep 	 : %d\n", pp->tts);
 	printf("Times to eat  	 : %d\n", pp->must_eat);
 	printf("Available forks  : %d\n", pp->forks);
-	state_change(1, 4);
 }
