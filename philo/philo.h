@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/11 14:55:47 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/12 19:27:45 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ typedef enum s_action
 {
 	SLEEP,
 	THINK,
-	EAT
+	EAT,
+	TAKE,
+	RETURN
 }	t_action;
 
 typedef enum s_status
@@ -51,7 +53,7 @@ typedef struct s_philosopher
 	t_action	state;
 	int			ttd;
 	int			must_eat;
-	int				has_eaten;
+	int			has_eaten;
 	int			forks;
 	pthread_t	thread;
 	t_pp		*pp;

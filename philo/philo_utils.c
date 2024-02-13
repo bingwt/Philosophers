@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/11 15:08:05 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/12 19:28:41 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 int	available_forks(t_philo *philo)
 {
 	int	forks;
+
 	pthread_mutex_lock(&philo->pp->mutex);
 	forks = philo->pp->forks;
 	pthread_mutex_unlock(&philo->pp->mutex);
@@ -72,7 +73,6 @@ int	check_philo(t_philo *philo)
 		philo_status(philo, (t_status) DEAD);
 		return (0);
 	}
-	// printf("%d\n", philo->pp->unique_eats);
 	if (philo->pp->unique_eats == philo->pp->phils)
 	{
 		printf("All philosophers have eaten\n");

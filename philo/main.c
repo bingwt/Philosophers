@@ -6,15 +6,33 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/11 15:12:12 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/13 12:33:08 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+t_pp	*init_pp(char **argv)
+{
+	struct timeval	timestamp;
+	t_pp			*pp;
+
+	gettimeofday(&timestamp, NULL);
+	pp = ft_calloc(1, sizeof(t_pp));
+	pp->start = timestamp.tv_sec;
+	pp->phils = ft_atoi(argv[1]);
+	pp->ttd = ft_atoi(argv[2]);
+	pp->tte = ft_atoi(argv[3]);
+	pp->tts = ft_atoi(argv[4]);
+	pp->must_eat = ft_atoi(argv[5]);
+	pp->forks = pp->phils;
+	pp->unique_eats = 0;
+	return (pp);
+}
+
 t_philo	*init_phils(t_pp *pp)
 {
-	t_philo *phils;
+	t_philo	*phils;
 	int		i;
 
 	phils = ft_calloc(pp->phils + 1, sizeof(t_philo));
@@ -34,24 +52,6 @@ t_philo	*init_phils(t_pp *pp)
 	return (phils);
 }
 
-void	sim(t_pp *pp, t_philo **phils)
-{
-	int	i;
-
-	i = 0;
-	while (i < pp->phils)
-	{
-		i++;
-		while ((*phils)->ttd != 0)
-		{
-			usleep(1000);
-			(*phils)->ttd--;
-			check_philo(*phils);
-		}
-		printf("Dieded");
-	}
-}
-
 int	sub_routine(void *args)
 {
 	t_philo	*phils;
@@ -65,6 +65,7 @@ int	sub_routine(void *args)
 		phils->pp->forks--;
 		phils->forks++;
 		pthread_mutex_unlock(&phils->pp->mutex);
+		// philo_action(phils, (t_action) TAKE);
 	}
 	if (phils->forks == 2 && phils->must_eat && phils->ttd > 0)
 	{
@@ -79,35 +80,36 @@ int	sub_routine(void *args)
 		phils->forks--;
 		phils->pp->forks++;
 		pthread_mutex_unlock(&phils->pp->mutex);
+		// philo_action(phils, (t_action) RETURN);
 	}
 	if (phils->ttd <= 0)
 		philo_status(phils, (t_status) DEAD);
 	return (1);
 }
 
-void routine(t_philo **phils)
+void	routine(t_philo **phils)
 {
-	int i;
-	int *threads;
+	int	i;
+	int	*threads;
 
 	i = 0;
 	threads = ft_calloc((*phils)->pp->phils + 1, sizeof(int));
 	while (i < (*phils)->pp->phils)
 	{
-		// printf("Philosopher number %d\n", (*phils)[i].num);
-		threads[i] = pthread_create(&(*phils)[i].thread, NULL, (void *) sub_routine, (void *)&(*phils)[i]);
-		//sub_routine(&(*phils)[i]);
+		threads[i] = pthread_create(&(*phils)[i].thread, NULL, \
+		(void *) sub_routine, (void *)&(*phils)[i]);
 		i++;
 	}
 	i = 0;
 	while (i < (*phils)->pp->phils)
 		pthread_join((*phils)[i++].thread, NULL);
+	free(threads);
 }
+
 int	main(int argc, char **argv)
 {
-	t_pp			pp;
+	t_pp			*pp;
 	t_philo			*phils;
-	struct timeval	timestamp;
 	int				philo;
 
 	if (argc != 6)
@@ -115,24 +117,28 @@ int	main(int argc, char **argv)
 		printf("Please provide 5 arguments!");
 		return (1);
 	}
-	gettimeofday(&timestamp, NULL);
-	pp.start = timestamp.tv_sec;
-	pp.phils = ft_atoi(argv[1]);
-	pp.ttd = ft_atoi(argv[2]);
-	pp.tte = ft_atoi(argv[3]);
-	pp.tts = ft_atoi(argv[4]);
-	pp.must_eat = ft_atoi(argv[5]);
-	pp.forks = pp.phils;
-	pp.unique_eats = 0;
-	pthread_mutex_init(&pp.mutex, NULL);
-	phils = init_phils(&pp);
+	pp = init_pp(argv);
+	pthread_mutex_init(&pp->mutex, NULL);
+	phils = init_phils(pp);
 	while (1)
 	{
 		routine(&phils);
 		philo = 0;
-		while (philo < pp.phils)
+		while (philo < pp->phils)
+		{
 			if (!check_philo(&phils[philo++]))
+			{
+				free(phils);
+				if (pp)
+				{
+					free(pp);
+					pp = NULL;
+				}
 				return (0);
+			}
+			free(phils);
+		}
+		free(pp);
 	}
 	return (0);
 }
