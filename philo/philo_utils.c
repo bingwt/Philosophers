@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/12 19:28:41 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/14 15:03:32 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,10 @@ int	check_philo(t_philo *philo)
 	return (1);
 }
 
-void	test(t_pp *pp)
+time_t	timestamp_in_ms(void)
 {
-	printf("Philosophers  	 : %d\n", pp->phils);
-	printf("Time to die   	 : %d\n", pp->ttd);
-	printf("Time to eat   	 : %d\n", pp->tte);
-	printf("Time to sleep 	 : %d\n", pp->tts);
-	printf("Times to eat  	 : %d\n", pp->must_eat);
-	printf("Available forks  : %d\n", pp->forks);
+	struct timeval	timestamp;
+
+	gettimeofday(&timestamp, NULL);
+	return ((timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000));
 }

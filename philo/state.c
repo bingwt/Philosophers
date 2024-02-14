@@ -18,7 +18,7 @@ static void	philo_sleep(t_philo *philo)
 	time_t			timestamp;
 
 	gettimeofday(&current, NULL);
-	timestamp = (current.tv_sec - philo->pp->start) * 1000;
+	timestamp = timestamp_in_ms() - philo->pp->start;
 	philo->state = (t_action) SLEEP;
 	printf("%ld %d is sleeping\n", timestamp, philo->num);
 	usleep(philo->pp->tts * 1000);
@@ -35,7 +35,7 @@ static void	philo_eat(t_philo *philo)
 	time_t			timestamp;
 
 	gettimeofday(&current, NULL);
-	timestamp = (current.tv_sec - philo->pp->start) * 1000;
+	timestamp = timestamp_in_ms() - philo->pp->start;
 	philo->state = (t_action) EAT;
 	printf("%ld %d is eating\n", timestamp, philo->num);
 	usleep(philo->pp->tte * 1000);
@@ -65,7 +65,7 @@ void	philo_action(t_philo *philo, t_action action)
 	time_t			timestamp;
 
 	gettimeofday(&current, NULL);
-	timestamp = (current.tv_sec - philo->pp->start) * 1000;
+	timestamp = timestamp_in_ms() - philo->pp->start;
 	pthread_mutex_lock(&philo->pp->mutex);
 	if (philo->state != action)
 	{
@@ -88,7 +88,7 @@ void	philo_status(t_philo *philo, t_status status)
 	time_t			timestamp;
 
 	gettimeofday(&current, NULL);
-	timestamp = (current.tv_sec - philo->pp->start) * 1000;
+	timestamp = timestamp_in_ms() - philo->pp->start;
 	if (status == (t_status) DEAD)
 		printf("%ld %d died\n", timestamp, philo->num);
 	if (status == (t_status) ALIVE)

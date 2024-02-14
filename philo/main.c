@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/13 12:33:08 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/14 14:37:24 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_pp	*init_pp(char **argv)
 
 	gettimeofday(&timestamp, NULL);
 	pp = ft_calloc(1, sizeof(t_pp));
-	pp->start = timestamp.tv_sec;
+	pp->start = timestamp.tv_sec * 1000 + timestamp.tv_usec / 1000;
 	pp->phils = ft_atoi(argv[1]);
 	pp->ttd = ft_atoi(argv[2]);
 	pp->tte = ft_atoi(argv[3]);
