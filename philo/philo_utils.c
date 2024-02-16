@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/14 15:03:32 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/16 18:35:05 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,37 +54,12 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (arr);
 }
 
-int	available_forks(t_philo *philo)
-{
-	int	forks;
-
-	pthread_mutex_lock(&philo->pp->mutex);
-	forks = philo->pp->forks;
-	pthread_mutex_unlock(&philo->pp->mutex);
-	return (forks);
-}
-
-int	check_philo(t_philo *philo)
-{
-	usleep(1000);
-	philo->ttd--;
-	if (philo->ttd == 0)
-	{
-		philo_status(philo, (t_status) DEAD);
-		return (0);
-	}
-	if (philo->pp->unique_eats == philo->pp->phils)
-	{
-		printf("All philosophers have eaten\n");
-		return (0);
-	}
-	return (1);
-}
-
-time_t	timestamp_in_ms(void)
+time_t	timestamp_in_ms(time_t start)
 {
 	struct timeval	timestamp;
 
 	gettimeofday(&timestamp, NULL);
-	return ((timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000));
+	if (!start)
+		return ((timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000));
+	return (timestamp_in_ms(0) - start);
 }
