@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/16 18:32:54 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/17 11:45:32 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ typedef struct s_philo
 	t_pp			*pp;
 	t_action		state;
 	pthread_t		thread;
-	struct s_philo	*next;
 	struct s_philo	*prev;
+	struct s_philo	*next;
 }	t_philo;
 
 int		ft_atoi(const char *str);

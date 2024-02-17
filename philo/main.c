@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/16 18:39:03 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/17 15:29:19 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ t_pp	*init_pp(char **argv)
 	pp->tts = ft_atoi(argv[4]);
 	pp->must_eat = ft_atoi(argv[5]);
 	return (pp);
+}
+
+void	link_phils(t_philo *phils)
+{
+	int	i;
+
+	i = 0;
+	while (phils[i].num)
+	{
+		if (phils[i + 1].num)
+			phils[i].next = &phils[i + 1];
+		if (i > 0)
+			phils[i].prev = &phils[i - 1];
+		i++;
+	}
+	phils[0].prev = &phils[i - 1];
+	phils[i - 1].next = &phils[0];
 }
 
 t_philo	*init_phils(t_pp *pp)
@@ -46,24 +63,8 @@ t_philo	*init_phils(t_pp *pp)
 		philo_action(0, &phils[i], (t_action) THINK);
 		i++;
 	}
+	link_phils(phils);
 	return (phils);
-}
-
-void	link_phils(t_philo *phils)
-{
-	int	i;
-
-	i = 0;
-	while (phils[i].num)
-	{
-		if (phils[i + 1].num)
-			phils[i].next = &phils[i + 1];
-		if (i > 0)
-			phils[i].prev = &phils[i - 1];
-		i++;
-	}
-	phils[0].prev = &phils[i - 1];
-	phils[i - 1].next = &phils[0];
 }
 
 int	sub_routine(void *args)
@@ -75,12 +76,14 @@ int	sub_routine(void *args)
 	start = phils->pp->start;
 	if (phils->next->forks == 1)
 		philo_action(timestamp_in_ms(phils->pp->start), phils, (t_action) TAKE);
-	if (phils->forks == 2)
+	if (phils->forks == 2 && phils->eaten < phils->pp->must_eat)
 	{
 		philo_action(timestamp_in_ms(start), phils, (t_action) EAT);
 		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 		philo_action(timestamp_in_ms(start), phils, (t_action) SLEEP);
 	}
+	else
+		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 
 	return (0);
 }
@@ -92,7 +95,7 @@ void	routine(t_philo *phils)
 
 	i = 0;
 	threads = ft_calloc(phils->pp->phils + 1, sizeof(int));
-	while (phils->pp->phils)
+	while (phils[i].num)
 	{
 		threads[i] = pthread_create(&phils[i].thread, NULL, (void *) sub_routine,\
 		(void *) &phils[i]);
@@ -116,10 +119,9 @@ int	main(int argc, char **argv)
 	pp = init_pp(argv);
 	pthread_mutex_init(&pp->mutex, NULL);
 	phils = init_phils(pp);
-	link_phils(phils);
-	sub_routine((void *) &phils[0]);
-//	while (1)
-//	{
-//		sub_routine();
-//	}
+//	sub_routine((void *) &phils[0]);
+	while (1)
+	{
+		routine(phils);
+	}
 }
