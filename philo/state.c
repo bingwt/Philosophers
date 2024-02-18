@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:39:28 by btan              #+#    #+#             */
-/*   Updated: 2024/02/16 18:27:10 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 13:19:55 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	philo_eat(time_t timestamp, t_philo *philo)
 	philo->eaten++;
 	usleep(philo->pp->tte * 1000);
 	philo->state = (t_action) EAT;
+	philo->last_meal = timestamp;
 }
 
 static void	philo_fork(time_t timestamp, t_philo *philo, t_action action)

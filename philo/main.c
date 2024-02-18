@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/17 15:29:19 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 12:13:25 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,13 @@ int	sub_routine(void *args)
 
 	phils = (t_philo *) args;
 	start = phils->pp->start;
+	philo_action(timestamp_in_ms(phils->pp->start), phils, (t_action) THINK);
 	if (phils->next->forks == 1)
 		philo_action(timestamp_in_ms(phils->pp->start), phils, (t_action) TAKE);
 	if (phils->forks == 2 && phils->eaten < phils->pp->must_eat)
 	{
 		philo_action(timestamp_in_ms(start), phils, (t_action) EAT);
+		printf("%d has eaten: %d times\n", phils->num, phils->eaten);
 		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 		philo_action(timestamp_in_ms(start), phils, (t_action) SLEEP);
 	}
@@ -113,7 +115,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 6)
 	{
-		printf("Please provide 5 arguments!");
+		printf("Please provide 5 arguments!\n");
 		return (1);
 	}
 	pp = init_pp(argv);
@@ -123,5 +125,9 @@ int	main(int argc, char **argv)
 	while (1)
 	{
 		routine(phils);
+		if (!check_phils(phils))
+		{
+			return (0);
+		}
 	}
 }

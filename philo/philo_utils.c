@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/16 18:35:05 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 12:14:19 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,19 @@ time_t	timestamp_in_ms(time_t start)
 	if (!start)
 		return ((timestamp.tv_sec * 1000) + (timestamp.tv_usec / 1000));
 	return (timestamp_in_ms(0) - start);
+}
+
+int	check_phils(t_philo *phils)
+{
+	int	i;
+
+	i = 0;
+	while (i < phils->pp->phils)
+	{
+		if (phils[i].eaten < phils->pp->must_eat)
+			return (1);
+		i++;
+	}
+	printf("All philosophers have eaten %d times\n", phils->pp->must_eat);
+	return (0);
 }
