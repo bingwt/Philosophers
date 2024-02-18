@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:39:28 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 13:19:55 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 14:55:04 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 static void	philo_sleep(time_t timestamp, t_philo *philo)
 {
 	printf("%ld %d is sleeping\n", timestamp, philo->num);
-	usleep(philo->pp->tts * 1000);
+	usleep(philo->tts * 1000);
 	philo->state = (t_action) SLEEP;
 }
 
 static void	philo_eat(time_t timestamp, t_philo *philo)
 {
 	printf("%ld %d is eating\n", timestamp, philo->num);
-	philo->eaten++;
-	usleep(philo->pp->tte * 1000);
+	philo->must_eat--;
+	usleep(philo->tte * 1000);
 	philo->state = (t_action) EAT;
 	philo->last_meal = timestamp;
 }
@@ -46,7 +46,6 @@ static void	philo_fork(time_t timestamp, t_philo *philo, t_action action)
 
 void	philo_action(time_t timestamp, t_philo *philo, t_action action)
 {
-	pthread_mutex_lock(&philo->pp->mutex);
 	if (philo->state != action)
 	{
 		philo->state = action;
@@ -59,7 +58,6 @@ void	philo_action(time_t timestamp, t_philo *philo, t_action action)
 		else
 			philo_fork(timestamp, philo, action);
 	}
-	pthread_mutex_unlock(&philo->pp->mutex);
 }
 
 void	philo_status(time_t timestamp, t_philo *philo, t_status status)

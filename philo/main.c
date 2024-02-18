@@ -6,25 +6,11 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 12:13:25 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 15:05:17 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-t_pp	*init_pp(char **argv)
-{
-	t_pp			*pp;
-
-	pp = ft_calloc(1, sizeof(t_pp));
-	pp->start = timestamp_in_ms(0);
-	pp->phils = ft_atoi(argv[1]);
-	pp->ttd = ft_atoi(argv[2]);
-	pp->tte = ft_atoi(argv[3]);
-	pp->tts = ft_atoi(argv[4]);
-	pp->must_eat = ft_atoi(argv[5]);
-	return (pp);
-}
 
 void	link_phils(t_philo *phils)
 {
@@ -43,20 +29,24 @@ void	link_phils(t_philo *phils)
 	phils[i - 1].next = &phils[0];
 }
 
-t_philo	*init_phils(t_pp *pp)
+t_philo	*init_phils(char **argv)
 {
 	t_philo	*phils;
 	int		i;
 
-	phils = ft_calloc(pp->phils + 1, sizeof(t_philo));
+	phils = ft_calloc(ft_atoi(argv[1]) + 1, sizeof(t_philo));
 	i = 0;
-	while (i < pp->phils)
+	while (i < ft_atoi(argv[1]))
 	{
 		phils[i].num = i + 1;
+		phils[i].ttd = ft_atoi(argv[2]);
+		phils[i].tte = ft_atoi(argv[3]);
+		phils[i].ttd = ft_atoi(argv[4]);
+		phils[i].must_eat = ft_atoi(argv[5]);
+		phils[i].total = ft_atoi(argv[1]);
 		phils[i].forks = 1;
-		phils[i].eaten = 0;
 		phils[i].last_meal = 0;
-		phils[i].pp = pp;
+		phils[i].start = timestamp_in_ms(0);
 		phils[i].state = 0;
 		phils[i].next = NULL;
 		phils[i].prev = NULL;
@@ -73,14 +63,13 @@ int	sub_routine(void *args)
 	time_t			start;
 
 	phils = (t_philo *) args;
-	start = phils->pp->start;
-	philo_action(timestamp_in_ms(phils->pp->start), phils, (t_action) THINK);
+	start = phils->start;
+	philo_action(timestamp_in_ms(phils->start), phils, (t_action) THINK);
 	if (phils->next->forks == 1)
-		philo_action(timestamp_in_ms(phils->pp->start), phils, (t_action) TAKE);
-	if (phils->forks == 2 && phils->eaten < phils->pp->must_eat)
+		philo_action(timestamp_in_ms(phils->start), phils, (t_action) TAKE);
+	if (phils->forks == 2 && phils->must_eat)
 	{
 		philo_action(timestamp_in_ms(start), phils, (t_action) EAT);
-		printf("%d has eaten: %d times\n", phils->num, phils->eaten);
 		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 		philo_action(timestamp_in_ms(start), phils, (t_action) SLEEP);
 	}
@@ -96,7 +85,7 @@ void	routine(t_philo *phils)
 	int	*threads;
 
 	i = 0;
-	threads = ft_calloc(phils->pp->phils + 1, sizeof(int));
+	threads = ft_calloc(phils->total + 1, sizeof(int));
 	while (phils[i].num)
 	{
 		threads[i] = pthread_create(&phils[i].thread, NULL, (void *) sub_routine,\
@@ -104,13 +93,12 @@ void	routine(t_philo *phils)
 		i++;
 	}
 	i = 0;
-	while (i < phils->pp->phils)
+	while (i < phils->total)
 		pthread_join(phils[i++].thread, NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	t_pp			*pp;
 	t_philo			*phils;
 
 	if (argc != 6)
@@ -118,9 +106,7 @@ int	main(int argc, char **argv)
 		printf("Please provide 5 arguments!\n");
 		return (1);
 	}
-	pp = init_pp(argv);
-	pthread_mutex_init(&pp->mutex, NULL);
-	phils = init_phils(pp);
+	phils = init_phils(argv);
 //	sub_routine((void *) &phils[0]);
 	while (1)
 	{

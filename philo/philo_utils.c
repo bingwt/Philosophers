@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 12:14:19 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 15:05:58 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,12 @@ int	check_phils(t_philo *phils)
 	int	i;
 
 	i = 0;
-	while (i < phils->pp->phils)
+	while (i < phils->total)
 	{
-		if (phils[i].eaten < phils->pp->must_eat)
+		if (phils[i].must_eat)
 			return (1);
 		i++;
 	}
-	printf("All philosophers have eaten %d times\n", phils->pp->must_eat);
+	printf("All philosophers have eaten\n");
 	return (0);
 }

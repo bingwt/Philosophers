@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 11:57:59 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 15:05:26 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,21 @@ typedef enum s_status
 
 typedef struct s_philo_params
 {
-	int				ttd;
-	int				tte;
-	int				tts;
 	int				phils;
-	int				must_eat;
-	time_t			start;
 	pthread_mutex_t	mutex;
 }	t_pp;
 
 typedef struct s_philo
 {
 	int				num;
+	int				ttd;
+	int				tte;
+	int				tts;
+	int				must_eat;
+	int				total;
 	int				forks;
-	int				eaten;
 	time_t			last_meal;
-	t_pp			*pp;
+	time_t			start;
 	t_action		state;
 	pthread_t		thread;
 	struct s_philo	*prev;
