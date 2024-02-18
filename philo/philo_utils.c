@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:51:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 15:05:58 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 17:25:20 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,12 @@ int	check_phils(t_philo *phils)
 	i = 0;
 	while (i < phils->total)
 	{
-		if (phils[i].must_eat)
+		if (phils[i].status == (t_status) DEAD)
+		{
+			printf("%ld %d died\n", phils->death, phils->num);
+			return (0);
+		}
+		else if (phils[i].must_eat)
 			return (1);
 		i++;
 	}

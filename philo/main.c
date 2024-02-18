@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 15:05:17 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/18 21:24:45 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,28 @@ t_philo	*init_phils(char **argv)
 {
 	t_philo	*phils;
 	int		i;
+	time_t	start;
 
 	phils = ft_calloc(ft_atoi(argv[1]) + 1, sizeof(t_philo));
 	i = 0;
+	start = timestamp_in_ms(0);  
 	while (i < ft_atoi(argv[1]))
 	{
 		phils[i].num = i + 1;
 		phils[i].ttd = ft_atoi(argv[2]);
 		phils[i].tte = ft_atoi(argv[3]);
-		phils[i].ttd = ft_atoi(argv[4]);
+		phils[i].tts = ft_atoi(argv[4]);
 		phils[i].must_eat = ft_atoi(argv[5]);
+		phils[i].eaten = 0;
 		phils[i].total = ft_atoi(argv[1]);
 		phils[i].forks = 1;
-		phils[i].last_meal = 0;
-		phils[i].start = timestamp_in_ms(0);
-		phils[i].state = 0;
+		phils[i].last_meal = start;
+		phils[i].start = start;
+		phils[i].action = 0;
 		phils[i].next = NULL;
 		phils[i].prev = NULL;
 		philo_action(0, &phils[i], (t_action) THINK);
+		philo_status(0, &phils[i], (t_status) ALIVE);
 		i++;
 	}
 	link_phils(phils);
@@ -59,21 +63,31 @@ t_philo	*init_phils(char **argv)
 
 int	sub_routine(void *args)
 {
-	t_philo			*phils;
-	time_t			start;
+	t_philo	*phils;
+	time_t	start;	
 
 	phils = (t_philo *) args;
 	start = phils->start;
-	philo_action(timestamp_in_ms(phils->start), phils, (t_action) THINK);
+	philo_action(timestamp_in_ms(start), phils, (t_action) THINK);
 	if (phils->next->forks == 1)
-		philo_action(timestamp_in_ms(phils->start), phils, (t_action) TAKE);
+		philo_action(timestamp_in_ms(start), phils, (t_action) TAKE);
+	if ((timestamp_in_ms(phils->last_meal) > phils->ttd && !phils->eaten) || \
+		timestamp_in_ms(start) > phils->ttd)
+//	if (timestamp_in_ms(start) > phils->ttd)
+	{
+	//	printf("last_meal = %ld\n", timestamp_in_ms(phils->last_meal));
+	//	printf("start = %ld\n", timestamp_in_ms(phils->start));
+		philo_status(timestamp_in_ms(start), phils, DEAD);
+		return (0);
+	}
 	if (phils->forks == 2 && phils->must_eat)
 	{
+		phils->eaten = 1;
 		philo_action(timestamp_in_ms(start), phils, (t_action) EAT);
 		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 		philo_action(timestamp_in_ms(start), phils, (t_action) SLEEP);
 	}
-	else
+	else if (phils->forks == 2)
 		philo_action(timestamp_in_ms(start), phils, (t_action) RETURN);
 
 	return (0);
