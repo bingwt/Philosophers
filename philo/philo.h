@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 21:22:28 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/20 13:30:53 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_philo
 	t_action		action;
 	t_status		status;
 	pthread_t		thread;
+	pthread_mutex_t	mutex;
 	struct s_philo	*prev;
 	struct s_philo	*next;
 }	t_philo;

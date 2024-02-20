@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/18 21:24:45 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/20 13:52:16 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,15 @@ void	routine(t_philo *phils)
 	{
 		threads[i] = pthread_create(&phils[i].thread, NULL, (void *) sub_routine,\
 		(void *) &phils[i]);
+		pthread_mutex_init(&phils[i].mutex, NULL);
 		i++;
 	}
 	i = 0;
 	while (i < phils->total)
+	{
 		pthread_join(phils[i++].thread, NULL);
+		pthread_mutex_destroy(&phils[i].mutex);
+	}
 }
 
 int	main(int argc, char **argv)
