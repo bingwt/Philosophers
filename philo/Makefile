@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
-#    Updated: 2024/02/13 12:29:14 by btan             ###   ########.fr        #
+#    Updated: 2024/02/23 01:28:32 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,7 @@ NAME = philo
 INCLUDES = .
 
 SRCS = philo_utils.c \
-	   state.c \
-	   main.c
+	   philo.c
 
 CC = cc
 

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 09:06:30 by btan              #+#    #+#             */
-/*   Updated: 2024/02/20 13:30:53 by btan             ###   ########.fr       */
+/*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
+/*   Updated: 2024/02/23 01:44:26 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,54 +19,44 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef enum s_action
+typedef enum e_action
 {
-	SLEEP,
 	THINK,
 	EAT,
+	SLEEP,
 	TAKE,
 	RETURN
-}	t_action;
+}	e_action;
 
-typedef enum s_status
+typedef enum e_status
 {
-	DEAD,
-	ALIVE
-}	t_status;
+	ALIVE,
+	DEAD
+}	e_status;
 
-typedef struct s_philo_params
+typedef struct s_philo_rules
 {
-	int				phils;
-	pthread_mutex_t	mutex;
-}	t_pp;
+	int		must_eat;
+	int		no_philos;
+	time_t	die;
+	time_t	eat;
+	time_t	slp;
+	time_t	start;
+}	t_rules;
+	
 
 typedef struct s_philo
 {
-	int				num;
-	int				ttd;
-	int				tte;
-	int				tts;
-	int				must_eat;
-	int				eaten;
-	int				total;
-	int				forks;
-	time_t			last_meal;
-	time_t			start;
-	time_t			death;
-	t_action		action;
-	t_status		status;
-	pthread_t		thread;
-	pthread_mutex_t	mutex;
-	struct s_philo	*prev;
-	struct s_philo	*next;
+	int			ate;
+	time_t		last_meal;
+	time_t		dead;
+	e_action	action;
+	e_status	status;
+	pthread_t	thread;
 }	t_philo;
 
-int		ft_atoi(const char *str);
 void	*ft_calloc(size_t nmemb, size_t size);
-time_t	timestamp_in_ms(time_t start);
-int		check_phils(t_philo *phils);
-
-void	philo_action(time_t timestamp, t_philo *philo, t_action action);
-void	philo_status(time_t timestamp, t_philo *philo, t_status status);
+int		ft_atoi(const char *str);
+time_t	time_ms(time_t start);
 
 #endif
