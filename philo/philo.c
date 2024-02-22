@@ -6,13 +6,13 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:07:29 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 02:01:07 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 03:12:11 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static t_rules	*init_rules(int	argc, char **argv)
+static t_rules	*init_rules(int argc, char **argv)
 {
 	t_rules	*rules;
 
@@ -31,16 +31,16 @@ static t_rules	*init_rules(int	argc, char **argv)
 	return (rules);
 }
 
-static int	philo_status(t_rules *rules, t_philo *philos)
+static int	philo_status(t_seat *seat)
 {
 	int	i;
 
 	i = 0;
-	while (i < rules->no_philos)
+	while (i < seat->rules->no_philos)
 	{
-		if (philos[i].status)
+		if (seat->philos[i].status)
 		{
-			printf("%ld %d died\n", philos[i].dead, i + 1);
+			printf("%ld %d died\n", seat->philos[i].dead, i + 1);
 			return ((e_status) DEAD);
 		}
 		i++;
@@ -48,29 +48,36 @@ static int	philo_status(t_rules *rules, t_philo *philos)
 	return ((e_status) ALIVE);
 }
 
-void	test(t_rules *rules, t_philo *philos)
+static void	sub(t_seat *seat)
 {
 	time_t	start;
 
-	printf("e_action: %d\n", (e_action) EAT);
-	start = time_ms(0);
-	printf("time_ms: %ld\n", start);
-	usleep(10 * 1000);
-	printf("time_ms: %ld\n", time_ms(start));
-	philo_status(rules, philos);
-	usleep(10 * 1000);
-	philos[0].status = (e_status) DEAD;
-	philos[0].dead = time_ms(start);
-	philo_status(rules, philos);
+	start = seat->rules->start;
+	philo_think(time_ms(start), seat->no, seat);
+}
+
+static void	routine(t_seat *seat)
+{
+	int	i;
+
+	i = 0;
+	while (i < seat->rules->no_philos)
+	{
+		seat->no = i + 1;
+		pthread_create(&seat->philos[i].thread, NULL, \
+		(void *) &sub, (void *) seat);
+	}
+	i = 0;
+	while (i < seat->rules->no_philos)
+		pthread_join(seat->philos[i++].thread, NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	t_rules	*rules;
-	t_philo	*philos;
+	t_seat	seat;
 
-	rules = init_rules(argc, argv);
-	philos = ft_calloc(rules->no_philos, sizeof(t_philo));
-	test(rules, philos);
+	seat.rules = init_rules(argc, argv);
+	seat.philos = ft_calloc(seat.rules->no_philos, sizeof(t_philo));
+	while (!philo_status(&seat))
+		routine(&seat);
 }
-

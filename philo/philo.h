@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 01:44:26 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 03:09:26 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,18 @@
 
 typedef enum e_action
 {
-	THINK,
-	EAT,
 	SLEEP,
+	EAT,
+	THINK,
 	TAKE,
 	RETURN
-}	e_action;
+}	t_action;
 
 typedef enum e_status
 {
 	ALIVE,
 	DEAD
-}	e_status;
+}	t_status;
 
 typedef struct s_philo_rules
 {
@@ -43,7 +43,6 @@ typedef struct s_philo_rules
 	time_t	slp;
 	time_t	start;
 }	t_rules;
-	
 
 typedef struct s_philo
 {
@@ -55,8 +54,19 @@ typedef struct s_philo
 	pthread_t	thread;
 }	t_philo;
 
+typedef struct s_seat
+{
+	int		no;
+	t_rules	*rules;
+	t_philo	*philos;
+}	t_seat;
+
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
 time_t	time_ms(time_t start);
+
+void	philo_think(time_t ms, int no, t_seat *seat);
+void	philo_eat(time_t ms, int no, t_seat *seat);
+void	philo_sleep(time_t ms, int no, t_seat *seat);
 
 #endif
