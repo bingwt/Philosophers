@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 03:09:26 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 04:01:20 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,21 @@ typedef struct s_philo_rules
 
 typedef struct s_philo
 {
+	int			forks;
 	int			ate;
 	time_t		last_meal;
 	time_t		dead;
-	e_action	action;
-	e_status	status;
+	t_action	action;
+	t_status	status;
 	pthread_t	thread;
 }	t_philo;
 
 typedef struct s_seat
 {
-	int		no;
-	t_rules	*rules;
-	t_philo	*philos;
+	int				no;
+	t_rules			*rules;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
 }	t_seat;
 
 void	*ft_calloc(size_t nmemb, size_t size);
@@ -68,5 +70,6 @@ time_t	time_ms(time_t start);
 void	philo_think(time_t ms, int no, t_seat *seat);
 void	philo_eat(time_t ms, int no, t_seat *seat);
 void	philo_sleep(time_t ms, int no, t_seat *seat);
+void	philo_forks(time_t ms, int no, t_seat *seat);
 
 #endif

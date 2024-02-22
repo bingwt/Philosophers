@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:07:29 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 03:12:11 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 04:04:09 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ static int	philo_status(t_seat *seat)
 		if (seat->philos[i].status)
 		{
 			printf("%ld %d died\n", seat->philos[i].dead, i + 1);
-			return ((e_status) DEAD);
+			return ((t_status) DEAD);
 		}
 		i++;
 	}
-	return ((e_status) ALIVE);
+	return ((t_status) ALIVE);
 }
 
 static void	sub(t_seat *seat)
@@ -54,6 +54,9 @@ static void	sub(t_seat *seat)
 
 	start = seat->rules->start;
 	philo_think(time_ms(start), seat->no, seat);
+	philo_forks(time_ms(start), seat->no, seat);
+	philo_sleep(time_ms(start), seat->no, seat);
+
 }
 
 static void	routine(t_seat *seat)
@@ -74,10 +77,15 @@ static void	routine(t_seat *seat)
 
 int	main(int argc, char **argv)
 {
-	t_seat	seat;
+	t_seat			seat;
+	int				no_philos;
 
 	seat.rules = init_rules(argc, argv);
-	seat.philos = ft_calloc(seat.rules->no_philos, sizeof(t_philo));
+	no_philos = seat.rules->no_philos;
+	seat.philos = ft_calloc(no_philos, sizeof(t_philo));
+	seat.forks = ft_calloc(no_philos, sizeof(pthread_mutex_t));
+	if (!seat.forks)
+		return (1);
 	while (!philo_status(&seat))
 		routine(&seat);
 }
