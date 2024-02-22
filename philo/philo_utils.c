@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 01:08:58 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 01:34:48 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 04:15:36 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_atoi(const char *str)
 	return (val * neg);
 }
 
-time_t	time_ms(time_t start)
+long	time_ms(time_t start)
 {
 	struct timeval	s_time;
 	time_t			timestamp;

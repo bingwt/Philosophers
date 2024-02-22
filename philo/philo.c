@@ -6,17 +6,44 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:07:29 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 04:04:09 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 05:01:03 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+static t_seat	*init_seats(t_rules *rules, t_philo *philos)
+{
+	pthread_mutex_t	*forks;
+	t_seat			*seats;
+	int				i;
+
+	forks = ft_calloc(rules->no_philos, sizeof(pthread_mutex_t));
+	if (!forks)
+		return (NULL);
+	i = 0;
+	while (i < rules->no_philos)
+		pthread_mutex_init(&forks[i++], NULL);
+	seats = ft_calloc(rules->no_philos, sizeof(t_seat));
+	if (!seats)
+		return (NULL);
+	i = 0;
+	while (i < rules->no_philos)
+	{
+		seats[i].no = i + 1;
+		seats[i].rules = rules;
+		seats[i].philos = philos;
+		seats[i].forks = forks;
+		i++;
+	}
+	return (seats);
+}
+
 static t_rules	*init_rules(int argc, char **argv)
 {
 	t_rules	*rules;
 
-	rules = ft_calloc(ft_atoi(argv[1]), sizeof(t_rules));
+	rules = ft_calloc(1, sizeof(t_rules));
 	if (!rules)
 		return (NULL);
 	if (argc != 6)
@@ -48,7 +75,7 @@ static int	philo_status(t_seat *seat)
 	return ((t_status) ALIVE);
 }
 
-static void	sub(t_seat *seat)
+void	sub(t_seat *seat)
 {
 	time_t	start;
 
@@ -56,7 +83,6 @@ static void	sub(t_seat *seat)
 	philo_think(time_ms(start), seat->no, seat);
 	philo_forks(time_ms(start), seat->no, seat);
 	philo_sleep(time_ms(start), seat->no, seat);
-
 }
 
 static void	routine(t_seat *seat)
@@ -69,6 +95,7 @@ static void	routine(t_seat *seat)
 		seat->no = i + 1;
 		pthread_create(&seat->philos[i].thread, NULL, \
 		(void *) &sub, (void *) seat);
+		i++;
 	}
 	i = 0;
 	while (i < seat->rules->no_philos)
@@ -77,15 +104,17 @@ static void	routine(t_seat *seat)
 
 int	main(int argc, char **argv)
 {
-	t_seat			seat;
+	t_rules			*rules;
+	t_philo			*philos;
+	t_seat			*seats;
 	int				no_philos;
 
-	seat.rules = init_rules(argc, argv);
-	no_philos = seat.rules->no_philos;
-	seat.philos = ft_calloc(no_philos, sizeof(t_philo));
-	seat.forks = ft_calloc(no_philos, sizeof(pthread_mutex_t));
-	if (!seat.forks)
+	rules = init_rules(argc, argv);
+	no_philos = rules->no_philos;
+	philos = ft_calloc(no_philos, sizeof(t_philo));
+	if (!philos)
 		return (1);
-	while (!philo_status(&seat))
-		routine(&seat);
+	seats = init_seats(rules, philos);
+	while (!philo_status(seats))
+		routine(seats);
 }

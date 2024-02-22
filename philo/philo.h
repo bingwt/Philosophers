@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 04:01:20 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 04:15:24 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_seat
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
-time_t	time_ms(time_t start);
+long	time_ms(time_t start);
 
 void	philo_think(time_t ms, int no, t_seat *seat);
 void	philo_eat(time_t ms, int no, t_seat *seat);
