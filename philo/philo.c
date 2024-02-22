@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:07:29 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 05:01:03 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 05:38:06 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static t_seat	*init_seats(t_rules *rules, t_philo *philos)
 		seats[i].no = i + 1;
 		seats[i].rules = rules;
 		seats[i].philos = philos;
+		seats->philos[i].dead = rules->start + rules->die;
 		seats[i].forks = forks;
 		i++;
 	}
@@ -77,10 +78,20 @@ static int	philo_status(t_seat *seat)
 
 void	sub(t_seat *seat)
 {
+	t_rules	*rules;
+	t_philo	*philo;
 	time_t	start;
 
+	rules = seat->rules;
+	philo = &seat->philos[seat->no];
 	start = seat->rules->start;
 	philo_think(time_ms(start), seat->no, seat);
+	if (rules->start - philo->dead < 0)
+	{
+		//philo->status = (t_status) DEAD;
+		//philo->dead = time_ms(start);
+		return ;
+	}
 	philo_forks(time_ms(start), seat->no, seat);
 	philo_sleep(time_ms(start), seat->no, seat);
 }

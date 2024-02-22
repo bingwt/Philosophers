@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 04:15:24 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 05:13:44 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,18 @@ typedef struct s_philo_rules
 {
 	int		must_eat;
 	int		no_philos;
-	time_t	die;
-	time_t	eat;
-	time_t	slp;
-	time_t	start;
+	long	die;
+	long	eat;
+	long	slp;
+	long	start;
 }	t_rules;
 
 typedef struct s_philo
 {
 	int			forks;
 	int			ate;
-	time_t		last_meal;
-	time_t		dead;
+	long		last_meal;
+	long		dead;
 	t_action	action;
 	t_status	status;
 	pthread_t	thread;
