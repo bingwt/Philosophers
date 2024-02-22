@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 09:11:43 by btan              #+#    #+#             */
-/*   Updated: 2024/02/20 13:52:16 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/22 12:05:04 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,18 @@ t_philo	*init_phils(char **argv)
 	return (phils);
 }
 
+t_status	forecast_status(t_philo *philo)
+{
+	time_t	finish_eat;
+
+	finish_eat = timestamp_in_ms(0) + philo->tte;
+	if (timestamp_in_ms(philo->start) > philo->ttd)
+		return ((t_status) DEAD);
+	if (timestamp_in_ms(finish_eat) > philo->ttd)
+		return ((t_status) DEAD);
+	return ((t_status) ALIVE);
+}
+
 int	sub_routine(void *args)
 {
 	t_philo	*phils;
@@ -71,6 +83,7 @@ int	sub_routine(void *args)
 	philo_action(timestamp_in_ms(start), phils, (t_action) THINK);
 	if (phils->next->forks == 1)
 		philo_action(timestamp_in_ms(start), phils, (t_action) TAKE);
+	printf("Philo %d: %d - %ldms\n", phils->num, forecast_status(phils), timestamp_in_ms(start));
 	if ((timestamp_in_ms(phils->last_meal) > phils->ttd && !phils->eaten) || \
 		timestamp_in_ms(start) > phils->ttd)
 //	if (timestamp_in_ms(start) > phils->ttd)
