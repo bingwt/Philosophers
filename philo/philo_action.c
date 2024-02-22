@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 02:04:36 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 05:47:06 by btan             ###   ########.fr       */
+/*   Updated: 2024/02/23 05:55:45 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,17 @@ void	philo_forks(time_t ms, int no, t_seat *seat)
 	right = seat->no;
 	if (seat->no == seat->rules->no_philos)
 		right = 0;
-	pthread_mutex_lock(&seat->forks[left]);
-	philo_take(ms, no, seat);
-	pthread_mutex_lock(&seat->forks[right]);
-	philo_take(ms, no, seat);
-	if (seat->philos[no].forks == 2)
+	if (seat->philos[no - 1].forks == 0)
+	{
+		pthread_mutex_lock(&seat->forks[left]);
+		philo_take(ms, no, seat);
+	}
+	if (seat->philos[no - 1].forks == 1)
+	{
+		pthread_mutex_lock(&seat->forks[right]);
+		philo_take(ms, no, seat);
+	}
+	if (seat->philos[no - 1].forks == 2)
 		philo_eat(ms, no, seat);
 	pthread_mutex_unlock(&seat->forks[left]);
 	pthread_mutex_unlock(&seat->forks[right]);
