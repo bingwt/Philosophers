@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:14:12 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 05:13:44 by btan             ###   ########.fr       */
+/*   Updated: 2024/03/06 11:29:31 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,11 @@ void	philo_think(time_t ms, int no, t_seat *seat);
 void	philo_eat(time_t ms, int no, t_seat *seat);
 void	philo_sleep(time_t ms, int no, t_seat *seat);
 void	philo_forks(time_t ms, int no, t_seat *seat);
+
+t_seat	*init_seats(t_rules *rules, t_philo *philos);
+t_rules	*init_rules(int argc, char **argv);
+int		philo_status(t_seat *seat);
+void	sub(t_seat *seat);
+void	routine(t_seat *seat);
 
 #endif

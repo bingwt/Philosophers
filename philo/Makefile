@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
-#    Updated: 2024/02/23 02:06:09 by btan             ###   ########.fr        #
+#    Updated: 2024/03/06 11:29:55 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,18 +16,19 @@ INCLUDES = .
 
 SRCS = philo_utils.c \
 	   philo_action.c \
-	   philo.c
+	   philo.c \
+	   main.c
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES)
 
 OBJECTS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME):
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME) -I$(INCLUDES)
+$(NAME): $(OBJECTS)
+	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJECTS) $(NAME).a

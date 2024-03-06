@@ -6,13 +6,13 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/23 00:07:29 by btan              #+#    #+#             */
-/*   Updated: 2024/02/23 05:38:06 by btan             ###   ########.fr       */
+/*   Updated: 2024/03/06 11:29:38 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static t_seat	*init_seats(t_rules *rules, t_philo *philos)
+t_seat	*init_seats(t_rules *rules, t_philo *philos)
 {
 	pthread_mutex_t	*forks;
 	t_seat			*seats;
@@ -40,7 +40,7 @@ static t_seat	*init_seats(t_rules *rules, t_philo *philos)
 	return (seats);
 }
 
-static t_rules	*init_rules(int argc, char **argv)
+t_rules	*init_rules(int argc, char **argv)
 {
 	t_rules	*rules;
 
@@ -59,7 +59,7 @@ static t_rules	*init_rules(int argc, char **argv)
 	return (rules);
 }
 
-static int	philo_status(t_seat *seat)
+int	philo_status(t_seat *seat)
 {
 	int	i;
 
@@ -96,7 +96,7 @@ void	sub(t_seat *seat)
 	philo_sleep(time_ms(start), seat->no, seat);
 }
 
-static void	routine(t_seat *seat)
+void	routine(t_seat *seat)
 {
 	int	i;
 
@@ -113,19 +113,3 @@ static void	routine(t_seat *seat)
 		pthread_join(seat->philos[i++].thread, NULL);
 }
 
-int	main(int argc, char **argv)
-{
-	t_rules			*rules;
-	t_philo			*philos;
-	t_seat			*seats;
-	int				no_philos;
-
-	rules = init_rules(argc, argv);
-	no_philos = rules->no_philos;
-	philos = ft_calloc(no_philos, sizeof(t_philo));
-	if (!philos)
-		return (1);
-	seats = init_seats(rules, philos);
-	while (!philo_status(seats))
-		routine(seats);
-}
