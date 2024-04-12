@@ -5,57 +5,49 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/06 11:43:02 by btan              #+#    #+#             */
-/*   Updated: 2024/03/06 20:21:48 by btan             ###   ########.fr       */
+/*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
+/*   Updated: 2024/04/12 16:58:18 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# include <string.h>
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
+# include <string.h>
 # include <sys/time.h>
-# include <pthread.h>
+# include <phtread.h>
 
-typedef enum e_action
+typedef enum	e_action
 {
 	THINK,
 	EAT,
-	SLEEP,
-	TAKE,
-	RETURN
+	SLEEP
 }	t_action;
 
-typedef enum e_status
+typedef enum	e_state
 {
 	ALIVE,
 	DEAD
-}	t_status;
+}	t_state;
 
-typedef struct s_rules
+
+typedef struct	s_rules
 {
-	int				no_philos;
-	int				ttd;
-	int				tte;
-	int				tts;
-	int				must_eat;
-	pthread_mutex_t	*forks;
+	int	no_philos;
+	int	ttd;
+	int	tte;
+	int	tts;
+	int	must_eat;
 }	t_rules;
 
-typedef struct s_philo
+typedef stuct	s_philo
 {
-	int	no;
-	int	forks;
-	int	action;
-	int	status;
-}	t_philo;
-
-void	usage(int argc);
-void	*ft_calloc(size_t nmemb, size_t size);
-int		ft_atoi(const char *str);
-long	time_ms(time_t start);
+	int			no;
+	int			ate;
+	t_state		ALIVE;
+	pthread_t	id;
+}
 
 #endif

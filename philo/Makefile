@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/05 09:14:10 by btan              #+#    #+#              #
-#    Updated: 2024/03/06 19:57:07 by btan             ###   ########.fr        #
+#    Created: 2024/04/12 15:19:54 by btan              #+#    #+#              #
+#    Updated: 2024/04/12 15:20:14 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,7 @@ NAME = philo
 
 INCLUDES = .
 
-SRCS = philo_utils.c \
-	   main.c
+SRCS = main.c
 
 CC = cc
 
@@ -33,7 +32,6 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
-
 
 re: fclean all
 
