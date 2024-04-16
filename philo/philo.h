@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/15 20:32:27 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/16 14:46:16 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ typedef enum	e_action
 	SLEEP
 }	t_action;
 
-typedef enum	e_state
+typedef enum	e_status
 {
 	ALIVE,
 	DEAD
-}	t_state;
+}	t_status;
 
 
 typedef struct	s_rules
@@ -47,13 +47,18 @@ typedef struct	s_rules
 
 typedef struct	s_philo
 {
+	int			id;
 	int			no;
 	int			meals;
-	t_state		status;
+	t_action	action;
+	t_status	status;
+	t_rules		*rules;
 	pthread_t	thread_id;
 }	t_philo;
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
+t_rules	*r_init(int argc, char **argv);
+t_philo	*p_init(char **argv, t_rules *rules);
 
 #endif
