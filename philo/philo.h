@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 01:19:04 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 01:41:40 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ typedef enum	e_status
 typedef struct	s_rules
 {
 	int				no_philo;
-	int				ttd;
-	int				tte;
-	int				tts;
+	long			ttd;
+	long			tte;
+	long			tts;
+	long			start;
 	int				must_eat;
 	int				*forks;
 	pthread_mutex_t	*mutex;
@@ -64,6 +65,7 @@ typedef struct	s_philo
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
+long	time_ms(time_t start);
 t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
 int		p_action(t_philo *philo, t_action action);

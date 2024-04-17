@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 01:19:33 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 01:42:08 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_rules	*r_init(int argc, char **argv)
 	rules->ttd = ft_atoi(argv[2]) * 1000;
 	rules->tte = ft_atoi(argv[3]) * 1000;
 	rules->tts = ft_atoi(argv[4]) * 1000;
+	rules->start = time_ms(0);
 	rules->forks = ft_calloc(no, sizeof(int));
 	rules->mutex = ft_calloc(no, sizeof(pthread_mutex_t));
 	if (argc == 6)
@@ -87,4 +88,14 @@ t_philo	*p_init(char **argv, t_rules *rules)
 		philo[id].rules = rules;
 	}
 	return (philo);
+}
+
+long	time_ms(time_t start)
+{
+	struct timeval	s_time;
+	time_t			timestamp;
+
+	gettimeofday(&s_time, NULL);
+	timestamp = ((s_time.tv_sec * 1000) + (s_time.tv_usec / 1000)) - start;
+	return (timestamp);
 }
