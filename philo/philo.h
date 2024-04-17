@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 01:41:40 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 02:17:12 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef enum	e_action
+typedef enum e_action
 {
 	THINK,
 	TAKE,
@@ -27,13 +27,13 @@ typedef enum	e_action
 	SLEEP
 }	t_action;
 
-typedef enum	e_status
+typedef enum e_status
 {
 	ALIVE,
 	DEAD
 }	t_status;
 
-typedef struct	s_rules
+typedef struct s_rules
 {
 	int				no_philo;
 	long			ttd;
@@ -45,13 +45,13 @@ typedef struct	s_rules
 	pthread_mutex_t	*mutex;
 }	t_rules;
 
-typedef struct	s_order
+typedef struct s_order
 {
 	int	left;
 	int	right;
 }	t_order;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int			id;
 	int			no;
