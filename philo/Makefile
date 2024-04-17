@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 15:19:54 by btan              #+#    #+#              #
-#    Updated: 2024/04/15 16:47:36 by btan             ###   ########.fr        #
+#    Updated: 2024/04/18 01:23:45 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = philo
 INCLUDES = .
 
 SRCS = philo_utils.c \
+	   philo_actions.c \
 	   main.c
 
 CC = cc
@@ -39,10 +40,13 @@ re: fclean all
 debug: CFLAGS += -g
 debug: re
 
-debug-thread: CFLAGS += -fsanitize=thread
+debug-thread: CFLAGS += -g -fsanitize=thread
 debug-thread: re
 
-debug-address: CFLAGS += -fsanitize=address
+debug-address: CFLAGS += -g -fsanitize=address
 debug-address: re
+
+debug-tsan: debug-thread
+	TSAN_OPTIONS=second_deadlock_stack=1 ./philo 2 100 50 25
 
 .PHONY: all clean fclean re

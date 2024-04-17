@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/16 14:45:17 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 01:19:33 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ t_rules	*r_init(int argc, char **argv)
 
 	no = ft_atoi(argv[1]);
 	rules = ft_calloc(1, sizeof(t_rules));
-	rules->no_philos = no;
-	rules->ttd = ft_atoi(argv[2]);
-	rules->tte = ft_atoi(argv[3]);
-	rules->tts = ft_atoi(argv[4]);
+	rules->no_philo = no;
+	rules->ttd = ft_atoi(argv[2]) * 1000;
+	rules->tte = ft_atoi(argv[3]) * 1000;
+	rules->tts = ft_atoi(argv[4]) * 1000;
 	rules->forks = ft_calloc(no, sizeof(int));
 	rules->mutex = ft_calloc(no, sizeof(pthread_mutex_t));
 	if (argc == 6)
@@ -69,13 +69,21 @@ t_philo	*p_init(char **argv, t_rules *rules)
 {
 	int		id;
 	t_philo	*philo;
+	t_order	*order;
 
 	id = ft_atoi(argv[1]);
 	philo = ft_calloc(id, sizeof(t_philo));
 	while (id--)
 	{
+		order = ft_calloc(1, sizeof(t_order));
+		order->left = id;
+		if (id == rules->no_philo - 1)
+			order->right = 0;
+		else
+			order->right = id + 1;
 		philo[id].id = id;
 		philo[id].no = id + 1;
+		philo[id].order = order;
 		philo[id].rules = rules;
 	}
 	return (philo);
