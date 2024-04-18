@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 16:24:05 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 23:57:15 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ void	p_think(t_philo *philo, long timestamp)
 	printf("%ld ", timestamp);
 	printf("%d is thinking\n", philo->no);
 	philo->action = THINK;
+}
+
+void	take_fork(t_philo *philo, int *forks, int hand, long timestamp)
+{
+	forks[hand] = 1;
+	printf("%ld %d has taken a fork\n", timestamp, philo->no);
+	philo->action = TAKE;
 }
 
 void	p_take(t_philo *philo, long timestamp)
@@ -31,21 +38,16 @@ void	p_take(t_philo *philo, long timestamp)
 	pthread_mutex_lock(&philo->rules->mutex[left]);
 	if (!forks[left])
 	{
-		forks[left] = 1;
-		printf("%ld %d has taken a fork\n", timestamp, philo->no);
+		take_fork(philo, forks, left, timestamp);
 		pthread_mutex_lock(&philo->rules->mutex[right]);
 		if (!forks[right])
+			take_fork(philo, forks, right, timestamp);
+		else
 		{
-			forks[right] = 1;
-			printf("%ld %d has taken a fork\n", timestamp, philo->no);
-			philo->action = TAKE;
+			forks[left] = 0;
+			pthread_mutex_unlock(&philo->rules->mutex[left]);
+			philo->action = THINK;
 		}
-	}
-	else
-	{
-		forks[left] = 0;
-		pthread_mutex_unlock(&philo->rules->mutex[left]);
-		philo->action = THINK;
 	}
 }
 
