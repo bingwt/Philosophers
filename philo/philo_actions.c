@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 03:15:59 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:09:19 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,91 +14,89 @@
 
 void	p_think(t_philo *philo, long timestamp)
 {
-	int	action;
-
-	action = philo->action;
-	if (action == THINK)
-	{
-		printf("%ld ", timestamp);
-		printf("%d is thinking\n", philo->no);
-	}
+	printf("%ld ", timestamp);
+	printf("%d is thinking\n", philo->no);
+	philo->action = THINK;
 }
 
 void	p_take(t_philo *philo, long timestamp)
 {
-	t_action	action;
 	int			left;
 	int			right;
 	int			*forks;
 
-	action = philo->action;
 	left = philo->order->left;
 	right = philo->order->right;
 	forks = philo->rules->forks;
-	if (action == TAKE && !(forks[left] && forks[right]))
+	pthread_mutex_lock(&philo->rules->mutex[left]);
+	if (!forks[left])
 	{
-		pthread_mutex_lock(&philo->rules->mutex[left]);
 		forks[left] = 1;
 		printf("%ld %d has taken a fork\n", timestamp, philo->no);
-	}
-	if (action == TAKE && !(!forks[left] && forks[right]))
-	{
 		pthread_mutex_lock(&philo->rules->mutex[right]);
-		forks[right] = 1;
-		printf("%ld %d has taken a fork\n", timestamp, philo->no);
+		if (!forks[right])
+		{
+			forks[right] = 1;
+			printf("%ld %d has taken a fork\n", timestamp, philo->no);
+			philo->action = TAKE;
+		}
+	}
+	else
+	{
+		forks[left] = 0;
+		pthread_mutex_unlock(&philo->rules->mutex[left]);
+		philo->action = THINK;
 	}
 }
 
 void	p_eat(t_philo *philo, long timestamp)
 {
-	t_action	action;
 	int			left;
 	int			right;
 	int			*forks;
 
-	action = philo->action;
 	left = philo->order->left;
 	right = philo->order->right;
 	forks = philo->rules->forks;
-	if (action == EAT && (forks[left] && forks[right]))
+	if (forks[left] && forks[right])
 	{
 		printf("%ld ", timestamp);
 		printf("%d is eating\n", philo->no);
 		usleep(philo->rules->tte);
 		philo->ts = time_ms(philo->rules->start);
-		pthread_mutex_unlock(&philo->rules->mutex[left]);
 		forks[left] = 0;
-		pthread_mutex_unlock(&philo->rules->mutex[right]);
 		forks[right] = 0;
+		pthread_mutex_unlock(&philo->rules->mutex[left]);
+		pthread_mutex_unlock(&philo->rules->mutex[right]);
 		philo->meals++;
+		philo->action = EAT;
 	}
 }
 
 void	p_sleep(t_philo *philo, long timestamp)
 {
-	int	action;
 
-	action = philo->action;
-	if (action == SLEEP)
-	{
-		printf("%ld ", timestamp);
-		printf("%d is sleeping\n", philo->no);
-		usleep(philo->rules->tts);
-		philo->ts = time_ms(philo->rules->start);
-	}
+	printf("%ld ", timestamp);
+	printf("%d is sleeping\n", philo->no);
+	usleep(philo->rules->tts);
+	philo->ts = time_ms(philo->rules->start);
+	philo->action = SLEEP;
 }
 
-int	p_action(t_philo *philo, t_action action)
+int	p_action(t_philo *philo)
 {
-//	long	start;
-	long	timestamp;
+	t_action	last_action;
+	long		timestamp;
 
-	philo->action = action;
-//	start = philo->rules->start;
+	last_action = philo->action;
 	timestamp = time_ms(philo->rules->start);
-	p_take(philo, timestamp);
-	p_eat(philo, timestamp);
-	p_sleep(philo, timestamp);
-	p_think(philo, timestamp);
+	if (last_action == SLEEP)
+		p_think(philo, timestamp);
+	else if (last_action == THINK)
+		p_take(philo, timestamp);
+	else if (last_action == TAKE)
+		p_eat(philo, timestamp);
+	else if (last_action == EAT)
+		p_sleep(philo, timestamp);
 	return (0);
 }
