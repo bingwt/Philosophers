@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 02:35:15 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:17:01 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ t_philo	*p_init(char **argv, t_rules *rules)
 			order->right = id + 1;
 		philo[id].id = id;
 		philo[id].no = id + 1;
+		philo[id].last_meal = rules->start;
 		philo[id].order = order;
 		philo[id].rules = rules;
 	}

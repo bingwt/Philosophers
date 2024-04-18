@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 16:09:47 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 16:14:09 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_philo
 	int			id;
 	int			no;
 	int			meals;
+	long		last_meal;
 	long		ts;
 	t_action	action;
 	t_status	status;
