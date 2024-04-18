@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 02:20:18 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/18 03:15:59 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,15 @@ void	p_take(t_philo *philo, long timestamp)
 	forks = philo->rules->forks;
 	if (action == TAKE && !(forks[left] && forks[right]))
 	{
-		printf("%ld ", timestamp);
 		pthread_mutex_lock(&philo->rules->mutex[left]);
 		forks[left] = 1;
-		printf("%d has taken a fork\n", philo->no);
+		printf("%ld %d has taken a fork\n", timestamp, philo->no);
 	}
 	if (action == TAKE && !(!forks[left] && forks[right]))
 	{
-		printf("%ld ", timestamp);
-//		pthread_mutex_lock(&philo->rules->mutex[right]);
+		pthread_mutex_lock(&philo->rules->mutex[right]);
 		forks[right] = 1;
-		printf("%d has taken a fork\n", philo->no);
+		printf("%ld %d has taken a fork\n", timestamp, philo->no);
 	}
 }
 
@@ -67,9 +65,10 @@ void	p_eat(t_philo *philo, long timestamp)
 		printf("%ld ", timestamp);
 		printf("%d is eating\n", philo->no);
 		usleep(philo->rules->tte);
+		philo->ts = time_ms(philo->rules->start);
 		pthread_mutex_unlock(&philo->rules->mutex[left]);
 		forks[left] = 0;
-//		pthread_mutex_unlock(&philo->rules->mutex[right]);
+		pthread_mutex_unlock(&philo->rules->mutex[right]);
 		forks[right] = 0;
 		philo->meals++;
 	}
@@ -85,18 +84,21 @@ void	p_sleep(t_philo *philo, long timestamp)
 		printf("%ld ", timestamp);
 		printf("%d is sleeping\n", philo->no);
 		usleep(philo->rules->tts);
+		philo->ts = time_ms(philo->rules->start);
 	}
 }
 
 int	p_action(t_philo *philo, t_action action)
 {
-	long	start;
+//	long	start;
+	long	timestamp;
 
 	philo->action = action;
-	start = philo->rules->start;
-	p_take(philo, time_ms(0) - start);
-	p_eat(philo, time_ms(0) - start);
-	p_sleep(philo, time_ms(0) - start);
-	p_think(philo, time_ms(0) - start);
+//	start = philo->rules->start;
+	timestamp = time_ms(philo->rules->start);
+	p_take(philo, timestamp);
+	p_eat(philo, timestamp);
+	p_sleep(philo, timestamp);
+	p_think(philo, timestamp);
 	return (0);
 }
