@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/19 13:25:54 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/19 14:29:10 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	p_eat(t_philo *philo, long timestamp)
 //		printf("%ld - last\n", philo->last_meal);
 //		printf("%ld - start\n", philo->rules->start);
 //		printf("%ld - ded\n", philo->last_meal - philo->rules->start);
-		printf("%ld %d died\n", time_ms(philo->last_meal), philo->no);
+		printf("%ld %d died\n", time_ms(philo->last_meal) - philo->rules->start, philo->no);
 	}
 	left = philo->order->left;
 	right = philo->order->right;
@@ -77,7 +77,7 @@ void	p_eat(t_philo *philo, long timestamp)
 		pthread_mutex_unlock(&philo->rules->mutex[left]);
 		pthread_mutex_unlock(&philo->rules->mutex[right]);
 		philo->meals++;
-		philo->last_meal = time_ms(0) - philo->last_meal;
+		philo->last_meal = time_ms(philo->last_meal);
 		philo->action = EAT;
 	}
 }
