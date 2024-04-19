@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 16:09:59 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/19 13:14:49 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,14 @@ void	*routine(void *philo)
 {
 //	int		id;
 	t_status	status;
-	int			meals;
 	int			must_eat;
 	//long	timestamp;
 
 //	id = ((t_philo *) philo)->id;
 	status = ((t_philo *) philo)->status;
-	meals = ((t_philo *) philo)->meals;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
-	while (status == ALIVE && meals < must_eat)
-	{
+	while (status == ALIVE && ((t_philo *) philo)->meals < must_eat)
 		p_action((t_philo *) philo);
-		meals = ((t_philo *) philo)->meals;
-	}
 	//timestamp = time_ms(((t_philo *) philo)->rules->start);
 	//printf("%ld %d finished %d meals\n", timestamp, ((t_philo *) philo)->no, must_eat);
 	return (NULL);

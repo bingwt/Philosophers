@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/18 23:57:15 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/19 13:25:54 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 void	p_think(t_philo *philo, long timestamp)
 {
-	printf("%ld ", timestamp);
-	printf("%d is thinking\n", philo->no);
+	printf("%ld %d is thinking\n", timestamp, philo->no);
 	philo->action = THINK;
 }
 
@@ -57,11 +56,12 @@ void	p_eat(t_philo *philo, long timestamp)
 	int			right;
 	int			*forks;
 
-	if (philo->last_meal - philo->rules->start > philo->rules->ttd)
+	if (time_ms(philo->last_meal) > philo->rules->ttd)
 	{
-		printf("%ld - last\n", philo->last_meal);
-		printf("%ld - start\n", philo->rules->start);
-		printf("%ld - ded\n", philo->last_meal - philo->rules->start);
+//		printf("%ld - last\n", philo->last_meal);
+//		printf("%ld - start\n", philo->rules->start);
+//		printf("%ld - ded\n", philo->last_meal - philo->rules->start);
+		printf("%ld %d died\n", time_ms(philo->last_meal), philo->no);
 	}
 	left = philo->order->left;
 	right = philo->order->right;
