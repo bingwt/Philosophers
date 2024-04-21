@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 01:51:14 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 03:09:11 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ typedef struct s_philo
 
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
-long	time_ms(time_t start);
+long	time_ms(long start);
 t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
-int		p_action(t_philo *philo);
+int		p_action(t_philo *philo, long timestamp);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 01:58:44 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 03:01:35 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,15 @@ void	print_action(long timestamp, t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->rules->print);
 }
 
-int	p_action(t_philo *philo)
+int	p_action(t_philo *philo, long timestamp)
 {
 	int			left;
 	int			right;
 	t_action	last_action;
-	long		timestamp;
 
 	left = philo->order->left;
 	right = philo->order->right;
 	last_action = philo->action;
-	timestamp = time_ms(philo->rules->start);
 	if (last_action == SLEEP)
 	{
 		philo->action = THINK;

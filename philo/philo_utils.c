@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/19 13:10:40 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 03:08:51 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_philo	*p_init(char **argv, t_rules *rules)
 	return (philo);
 }
 
-long	time_ms(time_t start)
+long	time_ms(long start)
 {
 	struct timeval	s_time;
 	time_t			timestamp;
