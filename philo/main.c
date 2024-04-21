@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 03:03:08 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 04:37:35 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,39 @@ void	*routine(void *philo)
 //	int		id;
 	t_status	status;
 	int			must_eat;
-	long	timestamp;
+	long		ttd;
+	long		start;
+	long		last_meal;
 
 //	id = ((t_philo *) philo)->id;
 	status = ((t_philo *) philo)->status;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
+	ttd = ((t_philo *) philo)->rules->ttd;
+	start = ((t_philo *) philo)->rules->start;
+	last_meal = ((t_philo *) philo)->last_meal;
 	while (status == ALIVE && ((t_philo *) philo)->meals < must_eat)
 	{
-		timestamp = time_ms(((t_philo *) philo)->rules->start);
-		p_action((t_philo *) philo, timestamp);
+	//	printf("last meal: %ld\n", philo->last_meal);
+	//	printf("  current: %ld\n", time_ms(0));
+	//	printf("     diff: %ld\n", time_ms(0) - philo->last_meal);
+		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
+		if (((t_philo *) philo)->rules->philo_no)
+		{
+			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
+			pthread_detach(((t_philo *) philo)->thread_id);
+			break ;
+		}
+		pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
+		if (time_ms(start) > ttd || time_ms(last_meal) > ttd)
+		{
+			print_action(time_ms(start), philo, "died");
+			pthread_mutex_lock(&((t_philo *) philo)->rules->status);
+			((t_philo *) philo)->rules->philo_no = ((t_philo *) philo)->no;
+			pthread_detach(((t_philo *) philo)->thread_id);
+			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
+			break ;
+		}
+		p_action((t_philo *) philo, time_ms(start));
 	}
 	//timestamp = time_ms(((t_philo *) philo)->rules->start);
 	//printf("%ld %d finished %d meals\n", timestamp, ((t_philo *) philo)->no, must_eat);
@@ -58,9 +82,19 @@ int	main(int argc, char **argv)
 		pthread_create(&philo[i].thread_id, NULL, routine, (void *) &philo[i]);
 		i++;
 	}
-	i = 0;
-	while (i < rules->no_philo)
-		pthread_join(philo[i++].thread_id, NULL);
+	while (1)
+	{
+		pthread_mutex_lock(&rules->status);
+		if (rules->philo_no)
+		{
+			pthread_mutex_unlock(&rules->status);
+			return (0);
+		}
+		pthread_mutex_unlock(&rules->status);
+	}
+//	i = 0;
+//	while (i < rules->no_philo)
+//		pthread_join(philo[i++].thread_id, NULL);
 	return (0);
 }
 
