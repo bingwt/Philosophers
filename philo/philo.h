@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/19 13:10:50 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 01:51:14 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_rules
 	long			start;
 	int				must_eat;
 	int				*forks;
+	pthread_mutex_t	print;
 	pthread_mutex_t	*mutex;
 }	t_rules;
 
@@ -56,6 +57,8 @@ typedef struct s_philo
 	int			id;
 	int			no;
 	int			meals;
+	int			left;
+	int			right;
 	long		last_meal;
 	long		tod;
 	long		ts;
