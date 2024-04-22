@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 17:13:03 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 19:13:21 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	*routine(void *philo)
 	ttd = ((t_philo *) philo)->rules->ttd;
 	start = ((t_philo *) philo)->rules->start;
 	last_meal = ((t_philo *) philo)->last_meal;
-	if (((t_philo *) philo)->no % 2 == 1)
-		usleep(1);
+//	if (((t_philo *) philo)->no % 2 == 1)
+//		usleep(1);
 	while (status == ALIVE && ((t_philo *) philo)->meals < must_eat)
 	{
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
@@ -37,15 +37,8 @@ void	*routine(void *philo)
 			break ;
 		}
 		pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
-		if (time_ms(start) > ttd || time_ms(last_meal) > ttd)
-		{
-			print_action(philo, "died");
-			pthread_mutex_lock(&((t_philo *) philo)->rules->status);
-			((t_philo *) philo)->rules->philo_no = ((t_philo *) philo)->no;
-			pthread_detach(((t_philo *) philo)->thread_id);
-			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
+		if (check_status((t_philo *) philo))
 			break ;
-		}
 		p_action((t_philo *) philo);
 	}
 	return (NULL);

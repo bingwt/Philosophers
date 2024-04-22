@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 17:08:49 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 19:16:18 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,84 @@ void	print_action(t_philo *philo, char *str)
 	pthread_mutex_unlock(&philo->rules->print);
 }
 
+void	p_take(t_philo *philo, t_order *order)
+{
+	philo->action = TAKE;
+	if (!philo->left)
+	{
+		pthread_mutex_lock(&philo->rules->mutex[order->left]);
+		philo->rules->forks[order->left] = 1;
+		philo->left = 1;
+		print_action(philo, "has taken a left fork");
+		if (philo->left)
+		{
+			pthread_mutex_lock(&philo->rules->mutex[order->right]);
+			philo->rules->forks[order->right] = 1;
+			philo->right = 1;
+			print_action(philo, "has taken a right fork");
+		}
+	}
+	if (!(philo->left || philo->right))
+	{
+		philo->rules->forks[order->left] = 0;
+		philo->left = 0;
+		print_action(philo, "has return a left fork");
+		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+	}
+}
+
+void	alt_take(t_philo *philo, t_order *order)
+{
+	philo->action = TAKE;
+	if (!philo->right)
+	{
+		pthread_mutex_lock(&philo->rules->mutex[order->right]);
+		philo->rules->forks[order->right] = 1;
+		philo->right = 1;
+		print_action(philo, "has taken a right fork");
+		if (philo->right)
+		{
+			pthread_mutex_lock(&philo->rules->mutex[order->left]);
+			philo->rules->forks[order->left] = 1;
+			philo->left = 1;
+			print_action(philo, "has taken a right left");
+		}
+	}
+	if (!(philo->right || philo->left))
+	{
+		philo->rules->forks[order->right] = 0;
+		philo->right = 0;
+		print_action(philo, "has return a right fork");
+		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+	}
+}
+
+void	p_eat(t_philo *philo, t_order *order)
+{
+	philo->action = EAT;
+	print_action(philo, "is eating");
+	usleep(philo->rules->tte);
+	philo->rules->forks[order->left] = 0;
+	philo->left = 0;
+	print_action(philo, "has return a left fork");
+	pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+	philo->rules->forks[order->right] = 0;
+	philo->right = 0;
+	print_action(philo, "has return a right fork");
+	pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+	philo->last_meal = time_ms(0);
+	philo->meals++;
+//	pthread_mutex_lock(&philo->rules->print);
+//	printf("%d ate %d times\n", philo->no, philo->meals);
+//	pthread_mutex_unlock(&philo->rules->print);
+}
+
 int	p_action(t_philo *philo)
 {
-	int			left;
-	int			right;
+	t_order		*order;
 	t_action	last_action;
 
-	left = philo->order->left;
-	right = philo->order->right;
+	order = philo->order;
 	last_action = philo->action;
 	if (last_action == SLEEP)
 	{
@@ -35,49 +105,15 @@ int	p_action(t_philo *philo)
 	}
 	else if (last_action == THINK)
 	{
-		philo->action = TAKE;
-		if (!philo->left)
-		{
-			pthread_mutex_lock(&philo->rules->mutex[left]);
-			philo->rules->forks[left] = 1;
-			philo->left = 1;
-			print_action(philo, "has taken a left fork");
-		//	print_action(timestamp, philo, "has taken a fork");
-			if (philo->left)
-			{
-				pthread_mutex_lock(&philo->rules->mutex[right]);
-				philo->rules->forks[right] = 1;
-				philo->right = 1;
-				print_action(philo, "has taken a right fork");
-			//	print_action(timestamp, philo, "has taken a fork");
-			}
-		}
-		if (!(philo->left && philo->right))
-			{
-				philo->rules->forks[left] = 0;
-				philo->left = 0;
-				print_action(philo, "has return a left fork");
-				pthread_mutex_unlock(&philo->rules->mutex[left]);
-			}
-		}
+		if (philo->no % 2)
+			p_take(philo, order);
+		else
+			alt_take(philo, order);
+	}
 	else if (last_action == TAKE)
 	{
 		if (philo->left && philo->right)
-		{	
-			philo->action = EAT;
-			print_action(philo, "is eating");
-			usleep(philo->rules->tte);
-			philo->rules->forks[left] = 0;
-			philo->left = 0;
-			print_action(philo, "has return a left fork");
-			pthread_mutex_unlock(&philo->rules->mutex[left]);
-			philo->rules->forks[right] = 0;
-			philo->right = 0;
-			print_action(philo, "has return a right fork");
-			pthread_mutex_unlock(&philo->rules->mutex[right]);
-			philo->last_meal = time_ms(0);
-			philo->meals++;
-		}
+			p_eat(philo, order);
 	}
 	else if (last_action == EAT)
 	{
