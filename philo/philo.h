@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 02:09:03 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 03:34:47 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,26 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+typedef enum e_error
+{
+	NOT_ENOUGH_ARGS,
+	TOO_MANY_ARGS,
+	NAN,
+}	t_error;
+
 typedef enum e_action
 {
-	THINK = 0,
-	TAKE = 1,
-	EAT = 2,
-	SLEEP = 3
+	THINK,
+	TAKE,
+	EAT,
+	SLEEP
 }	t_action;
 
 typedef enum e_status
 {
-	ALIVE = 0,
-	DEAD = 1,
-	FULL = 2
+	ALIVE,
+	DEAD,
+	FULL
 }	t_status;
 
 typedef struct s_rules
@@ -69,11 +76,11 @@ typedef struct s_philo
 	t_status	status;
 	t_order		*order;
 	t_rules		*rules;
-	pthread_t	thread_id;
+	pthread_t	thread;
 }	t_philo;
 
 void	*ft_calloc(size_t nmemb, size_t size);
-int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
 long	time_ms(long start);
 t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
