@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 04:37:35 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 17:13:03 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,21 @@
 
 void	*routine(void *philo)
 {
-//	int		id;
 	t_status	status;
 	int			must_eat;
 	long		ttd;
 	long		start;
 	long		last_meal;
 
-//	id = ((t_philo *) philo)->id;
 	status = ((t_philo *) philo)->status;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
 	ttd = ((t_philo *) philo)->rules->ttd;
 	start = ((t_philo *) philo)->rules->start;
 	last_meal = ((t_philo *) philo)->last_meal;
+	if (((t_philo *) philo)->no % 2 == 1)
+		usleep(1);
 	while (status == ALIVE && ((t_philo *) philo)->meals < must_eat)
 	{
-	//	printf("last meal: %ld\n", philo->last_meal);
-	//	printf("  current: %ld\n", time_ms(0));
-	//	printf("     diff: %ld\n", time_ms(0) - philo->last_meal);
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
 		if (((t_philo *) philo)->rules->philo_no)
 		{
@@ -42,17 +39,15 @@ void	*routine(void *philo)
 		pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
 		if (time_ms(start) > ttd || time_ms(last_meal) > ttd)
 		{
-			print_action(time_ms(start), philo, "died");
+			print_action(philo, "died");
 			pthread_mutex_lock(&((t_philo *) philo)->rules->status);
 			((t_philo *) philo)->rules->philo_no = ((t_philo *) philo)->no;
 			pthread_detach(((t_philo *) philo)->thread_id);
 			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
 			break ;
 		}
-		p_action((t_philo *) philo, time_ms(start));
+		p_action((t_philo *) philo);
 	}
-	//timestamp = time_ms(((t_philo *) philo)->rules->start);
-	//printf("%ld %d finished %d meals\n", timestamp, ((t_philo *) philo)->no, must_eat);
 	return (NULL);
 }
 

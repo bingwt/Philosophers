@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 04:31:01 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 17:08:55 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int		ft_atoi(const char *str);
 long	time_ms(long start);
 t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
-void	print_action(long timestamp, t_philo *philo, char *str);
-int		p_action(t_philo *philo, long timestamp);
+void	print_action(t_philo *philo, char *str);
+int		p_action(t_philo *philo);
 
 #endif
