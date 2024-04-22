@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 15:19:54 by btan              #+#    #+#              #
-#    Updated: 2024/04/22 18:00:35 by btan             ###   ########.fr        #
+#    Updated: 2024/04/22 21:28:19 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,9 +48,9 @@ debug-address: CFLAGS += -g -fsanitize=address
 debug-address: re
 
 debug-tsan: debug-thread
-	TSAN_OPTIONS=second_deadlock_stack=1 ./philo 3 100 50 25 2
+	TSAN_OPTIONS=second_deadlock_stack=1 ./philo 5 800 200 200 5
 
-drift:
-	$(CC) drift.c philo_utils.c -o drift -g
+drift: drift.c philo_utils.c philo_status.c philo_actions.c
+	$(CC) drift.c philo_utils.c philo_status.c philo_actions.c -o drift -g
 
 .PHONY: all clean fclean re

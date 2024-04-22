@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 19:16:18 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 19:20:10 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,13 @@ void	p_eat(t_philo *philo, t_order *order)
 	pthread_mutex_unlock(&philo->rules->mutex[order->right]);
 	philo->last_meal = time_ms(0);
 	philo->meals++;
-//	pthread_mutex_lock(&philo->rules->print);
-//	printf("%d ate %d times\n", philo->no, philo->meals);
-//	pthread_mutex_unlock(&philo->rules->print);
+	if (philo->meals == philo->rules->must_eat)
+	{
+		philo->status = FULL;
+		pthread_mutex_lock(&philo->rules->print);
+		printf("%d ate %d times\n", philo->no, philo->meals);
+		pthread_mutex_unlock(&philo->rules->print);
+	}
 }
 
 int	p_action(t_philo *philo)

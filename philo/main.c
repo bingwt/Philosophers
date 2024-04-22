@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 19:13:21 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/22 21:27:25 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	*routine(void *philo)
 		if (((t_philo *) philo)->rules->philo_no)
 		{
 			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
-			pthread_detach(((t_philo *) philo)->thread_id);
+		//	pthread_detach(((t_philo *) philo)->thread_id);
 			break ;
 		}
 		pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
@@ -70,19 +70,25 @@ int	main(int argc, char **argv)
 		pthread_create(&philo[i].thread_id, NULL, routine, (void *) &philo[i]);
 		i++;
 	}
-	while (1)
+//	while (1)
+//	{
+//		pthread_mutex_lock(&rules->status);
+//		if (rules->philo_no)
+//		{
+//			pthread_mutex_unlock(&rules->status);
+//			return (0);
+//		}
+//		pthread_mutex_unlock(&rules->status);
+//	}
+	i = 0;
+	while (i < rules->no_philo)
 	{
-		pthread_mutex_lock(&rules->status);
-		if (rules->philo_no)
-		{
-			pthread_mutex_unlock(&rules->status);
-			return (0);
-		}
-		pthread_mutex_unlock(&rules->status);
+		pthread_join(philo[i].thread_id, NULL);
+		pthread_mutex_destroy(&philo->rules->mutex[i]);
+//		free(philo[i]);
+		i++;
 	}
-//	i = 0;
-//	while (i < rules->no_philo)
-//		pthread_join(philo[i++].thread_id, NULL);
+
 	return (0);
 }
 
