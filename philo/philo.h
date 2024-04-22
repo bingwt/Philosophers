@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 01:36:02 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 02:09:03 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ long	time_ms(long start);
 t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
 int		check_status(t_philo *philo);
-void	philo_do(long ms);
+void	philo_sleep(long ms);
 void	free_philo(t_philo *philo, t_rules *rules);
 void	print_action(t_philo *philo, char *str);
 int		p_action(t_philo *philo);

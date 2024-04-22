@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 01:40:32 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 02:32:26 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,24 @@ long	time_ms(long start)
 
 int	check_status(t_philo *philo)
 {
-	if (time_ms(philo->last_meal) > philo->rules->ttd)
+	if (time_ms(philo->last_meal) >= philo->rules->ttd)
 	{
 		print_action(philo, "died");
 		pthread_mutex_lock(&philo->rules->status);
 		philo->rules->philo_no = philo->no;
-		pthread_detach(philo->thread_id);
 		pthread_mutex_unlock(&philo->rules->status);
 		return (1);
 	}
 	return (0);
 }
 
-void	philo_do(long ms)
+void	philo_sleep(long ms)
 {
 	int	i;
 
-	i = ms / 100;
-	while (i)
-	{
-		usleep(100);
-		i--;
-	}
+	i = ms / 1500;
+	while (i--)
+		usleep(1500);
 }
 
 void	free_philo(t_philo *philo, t_rules *rules)

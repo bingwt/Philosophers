@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 01:29:52 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 02:29:43 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ t_rules	*r_init(int argc, char **argv)
 	no = ft_atoi(argv[1]);
 	rules = ft_calloc(1, sizeof(t_rules));
 	rules->no_philo = no;
-	rules->ttd = ft_atoi(argv[2]) * 1000;
-	rules->tte = ft_atoi(argv[3]) * 1000;
-	rules->tts = ft_atoi(argv[4]) * 1000;
+	rules->ttd = ft_atoi(argv[2]);
+	rules->tte = ft_atoi(argv[3]);
+	rules->tts = ft_atoi(argv[4]);
 	rules->start = time_ms(0);
 	rules->forks = ft_calloc(no, sizeof(int));
 	rules->mutex = ft_calloc(no, sizeof(pthread_mutex_t));

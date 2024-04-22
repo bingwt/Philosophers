@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 01:58:15 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 02:35:12 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	*routine(void *philo)
 	status = ((t_philo *) philo)->status;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
 	meals = ((t_philo *) philo)->meals;
-//	if (((t_philo *) philo)->no % 2 == 1)
-//		usleep(1);
+	if (((t_philo *) philo)->no % 2 == 1)
+		usleep(1);
 	while (status == ALIVE && meals != must_eat)
 	{
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
