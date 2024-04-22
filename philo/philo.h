@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/22 20:52:22 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 01:36:02 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 
 typedef enum e_action
 {
-	THINK,
-	TAKE,
-	EAT,
-	SLEEP
+	THINK = 0,
+	TAKE = 1,
+	EAT = 2,
+	SLEEP = 3
 }	t_action;
 
 typedef enum e_status
 {
-	ALIVE,
-	DEAD,
-	FULL
+	ALIVE = 0,
+	DEAD = 1,
+	FULL = 2
 }	t_status;
 
 typedef struct s_rules
@@ -79,6 +79,7 @@ t_rules	*r_init(int argc, char **argv);
 t_philo	*p_init(char **argv, t_rules *rules);
 int		check_status(t_philo *philo);
 void	philo_do(long ms);
+void	free_philo(t_philo *philo, t_rules *rules);
 void	print_action(t_philo *philo, char *str);
 int		p_action(t_philo *philo);
 
