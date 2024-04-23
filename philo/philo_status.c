@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 18:42:02 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 20:34:30 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_status(t_philo *philo)
 //	printf("current time: %ld\n", time_ms(0));
 //	printf("   last meal: %ld\n", philo->last_meal);
 //	printf("        diff: %ld\n", time_ms(philo->last_meal));
-	if (time_ms(0) - philo->last_meal >= philo->rules->ttd)
+	if (time_ms(0) - philo->last_meal > philo->rules->ttd)
 	{
 		print_action(philo, "died");
 		philo->status = DEAD;
@@ -49,7 +49,6 @@ int	monitor(t_philo *philo, t_rules *rules)
 			return (1);
 		i++;
 	}
-	usleep(500);
 	return (0);
 }
 
