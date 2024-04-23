@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 01:01:03 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 02:14:37 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,12 @@ void	alt_take(t_philo *philo, t_order *order)
 			pthread_mutex_lock(&philo->rules->mutex[order->left]);
 			philo->rules->forks[order->left] = 1;
 			philo->left = 1;
+			if (check_status(philo))
+			{
+				pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+				return ;
+			}
 			print_action(philo, "has taken a right left");
 		}
 	}
