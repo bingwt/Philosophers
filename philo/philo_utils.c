@@ -6,29 +6,23 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 02:52:13 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 18:42:21 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*ptr;
-
-	ptr = (char *) s;
-	while (n > 0)
-		ptr[(n--) - 1] = '\0';
-}
-
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void	*arr;
+	char	*arr;
+	size_t	n;
 
 	arr = malloc(nmemb * size);
 	if (!arr)
 		return (NULL);
-	ft_bzero(arr, nmemb * size);
+	n = nmemb * size;
+	while (--n)
+		arr[n] = '\0';
 	return ((void *) arr);
 }
 
@@ -106,4 +100,14 @@ t_philo	*p_init(char **argv, t_rules *rules)
 		philo[id].rules = rules;
 	}
 	return (philo);
+}
+
+long	time_ms(long start)
+{
+	struct timeval	s_time;
+	time_t			timestamp;
+
+	gettimeofday(&s_time, NULL);
+	timestamp = ((s_time.tv_sec * 1000) + (s_time.tv_usec / 1000)) - start;
+	return (timestamp);
 }
