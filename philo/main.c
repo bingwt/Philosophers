@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 15:14:31 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 20:23:56 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	main(int argc, char **argv)
 	t_philo	*philo;
 	int		i;
 
-	if (check_input(argc, argv))
-		return (1);
+//	if (check_input(argc, argv))
+//		return (1);
 	rules = r_init(argc, argv);
 	philo = p_init(argv, rules);
 	i = 0;
@@ -106,11 +106,11 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	i = 0;
-	while (i < rules->no_philo)
-		pthread_join(philo[i++].thread, NULL);
 	while (1)
 		if (monitor(philo, rules))
 			break ;
+	while (i < rules->no_philo)
+		pthread_join(philo[i++].thread, NULL);
 	i = 0;
 	while (i < rules->no_philo)
 	{
