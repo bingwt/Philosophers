@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 15:13:50 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 21:09:57 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_rules
 	int				philo_no;
 	pthread_mutex_t	print;
 	pthread_mutex_t	status;
+	pthread_mutex_t	*meal;
 	pthread_mutex_t	*mutex;
 }	t_rules;
 

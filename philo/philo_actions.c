@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 14:20:01 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 21:20:02 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,16 @@ void	p_take(t_philo *philo, t_order *order)
 		pthread_mutex_lock(&philo->rules->mutex[order->left]);
 		philo->rules->forks[order->left] = 1;
 		philo->left = 1;
+		if (check_status(philo))
+			return ;
 		print_action(philo, "has taken a left fork");
 		if (philo->left)
 		{
+			if (check_status(philo))
+			{
+				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+				return ;
+			}
 			if (philo->rules->no_philo < 2)
 			{
 				philo_sleep(philo->rules->ttd);
@@ -62,9 +69,16 @@ void	alt_take(t_philo *philo, t_order *order)
 		pthread_mutex_lock(&philo->rules->mutex[order->right]);
 		philo->rules->forks[order->right] = 1;
 		philo->right = 1;
+		if (check_status(philo))
+		{
+			pthread_mutex_lock(&philo->rules->mutex[order->right]);
+			return ;
+		}
 		print_action(philo, "has taken a right fork");
 		if (philo->right)
 		{
+			if (check_status(philo))
+				return ;
 			pthread_mutex_lock(&philo->rules->mutex[order->left]);
 			philo->rules->forks[order->left] = 1;
 			philo->left = 1;
