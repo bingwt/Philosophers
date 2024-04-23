@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 21:33:09 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 01:01:03 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void	print_action(t_philo *philo, char *str)
 
 void	p_take(t_philo *philo, t_order *order)
 {
+	pthread_mutex_lock(&philo->rules->meal[order->left]);
 	philo->action = TAKE;
+	pthread_mutex_unlock(&philo->rules->meal[order->left]);
 	if (check_status(philo))
 			return ;
 	if (!philo->left)
@@ -70,7 +72,9 @@ void	p_take(t_philo *philo, t_order *order)
 
 void	alt_take(t_philo *philo, t_order *order)
 {
+	pthread_mutex_lock(&philo->rules->meal[order->left]);
 	philo->action = TAKE;
+	pthread_mutex_unlock(&philo->rules->meal[order->left]);
 	if (check_status(philo))
 			return ;
 	if (!philo->right)
@@ -110,7 +114,9 @@ void	p_eat(t_philo *philo, t_order *order)
 {
 	if (check_status(philo))
 			return ;
+	pthread_mutex_lock(&philo->rules->meal[order->left]);
 	philo->action = EAT;
+	pthread_mutex_unlock(&philo->rules->meal[order->left]);
 	print_action(philo, "is eating");
 	philo_sleep(philo->rules->tte);
 	philo->rules->forks[order->left] = 0;
@@ -127,7 +133,9 @@ void	p_eat(t_philo *philo, t_order *order)
 	philo->meals++;
 	if (philo->meals == philo->rules->must_eat)
 	{
+		pthread_mutex_lock(&philo->rules->meal[order->left]);
 		philo->status = FULL;
+		pthread_mutex_unlock(&philo->rules->meal[order->left]);
 		pthread_mutex_lock(&philo->rules->print);
 		printf("%d ate %d times\n", philo->no, philo->meals);
 		pthread_mutex_unlock(&philo->rules->print);
@@ -146,7 +154,9 @@ int	p_action(t_philo *philo)
 	last_action = philo->action;
 	if (last_action == SLEEP)
 	{
+		pthread_mutex_lock(&philo->rules->meal[order->left]);
 		philo->action = THINK;
+		pthread_mutex_unlock(&philo->rules->meal[order->left]);
 		print_action(philo, "is thinking");
 	}
 	else if (last_action == THINK)
@@ -163,7 +173,9 @@ int	p_action(t_philo *philo)
 	}
 	else if (last_action == EAT)
 	{
+		pthread_mutex_lock(&philo->rules->meal[order->left]);
 		philo->action = SLEEP;
+		pthread_mutex_unlock(&philo->rules->meal[order->left]);
 		print_action(philo, "is sleeping");
 		philo_sleep(philo->rules->tts);
 	}
