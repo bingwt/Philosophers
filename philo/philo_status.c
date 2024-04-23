@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 01:20:27 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 02:21:13 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void	philo_sleep(long milliseconds)
 
 int	check_status(t_philo *philo)
 {
-//	printf("current time: %ld\n", time_ms(0));
-//	printf("   last meal: %ld\n", philo->last_meal);
-//	printf("        diff: %ld\n", time_ms(philo->last_meal));
 	pthread_mutex_lock(&philo->rules->status);
 	if (philo->rules->philo_no)
 	{
