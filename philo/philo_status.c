@@ -6,11 +6,18 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:21:13 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 02:55:00 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_action(t_philo *philo, char *str)
+{
+	pthread_mutex_lock(&philo->rules->print);
+	printf("%ld %d %s\n", time_ms(philo->rules->start), philo->no, str);
+	pthread_mutex_unlock(&philo->rules->print);
+}
 
 void	philo_sleep(long milliseconds)
 {

@@ -6,18 +6,11 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:23:19 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 02:59:50 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	print_action(t_philo *philo, char *str)
-{
-	pthread_mutex_lock(&philo->rules->print);
-	printf("%ld %d %s\n", time_ms(philo->rules->start), philo->no, str);
-	pthread_mutex_unlock(&philo->rules->print);
-}
 
 void	p_take(t_philo *philo, t_order *order)
 {
@@ -28,44 +21,13 @@ void	p_take(t_philo *philo, t_order *order)
 		return ;
 	if (!philo->left)
 	{
-		pthread_mutex_lock(&philo->rules->mutex[order->left]);
-		philo->rules->forks[order->left] = 1;
-		philo->left = 1;
-		if (check_status(philo))
-		{
-			pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+		if (take_left(philo, order))
 			return ;
-		}
-		print_action(philo, "has taken a fork");
 		if (philo->left)
 		{
-			if (check_status(philo))
-			{
-				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
+			if (take_right(philo, order))
 				return ;
-			}
-			if (philo->rules->no_philo < 2)
-			{
-				philo_sleep(philo->rules->ttd);
-				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
-				return ;
-			}
-			if (check_status(philo))
-			{
-				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
-				return ;
-			}
-			pthread_mutex_lock(&philo->rules->mutex[order->right]);
-			philo->rules->forks[order->right] = 1;
-			philo->right = 1;
-			print_action(philo, "has taken a fork");
 		}
-	}
-	if (!(philo->left || philo->right))
-	{
-		philo->rules->forks[order->left] = 0;
-		philo->left = 0;
-		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
 	}
 }
 
@@ -78,46 +40,18 @@ void	alt_take(t_philo *philo, t_order *order)
 		return ;
 	if (!philo->right)
 	{
-		pthread_mutex_lock(&philo->rules->mutex[order->right]);
-		philo->rules->forks[order->right] = 1;
-		philo->right = 1;
-		if (check_status(philo))
-		{
-			pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+		if (alt_right(philo, order))
 			return ;
-		}
-		print_action(philo, "has taken a fork");
 		if (philo->right)
 		{
-			if (check_status(philo))
-			{
-				pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+			if (alt_left(philo, order))
 				return ;
-			}
-			pthread_mutex_lock(&philo->rules->mutex[order->left]);
-			philo->rules->forks[order->left] = 1;
-			philo->left = 1;
-			if (check_status(philo))
-			{
-				pthread_mutex_unlock(&philo->rules->mutex[order->right]);
-				pthread_mutex_unlock(&philo->rules->mutex[order->left]);
-				return ;
-			}
-			print_action(philo, "has taken a fork");
 		}
-	}
-	if (!(philo->right || philo->left))
-	{
-		philo->rules->forks[order->right] = 0;
-		philo->right = 0;
-		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
 	}
 }
 
 void	p_eat(t_philo *philo, t_order *order)
 {
-	if (check_status(philo))
-		return ;
 	pthread_mutex_lock(&philo->rules->meal[order->left]);
 	philo->action = EAT;
 	pthread_mutex_unlock(&philo->rules->meal[order->left]);
@@ -144,6 +78,25 @@ void	p_eat(t_philo *philo, t_order *order)
 	}
 }
 
+void	think_sleep(t_action last_action, t_philo *philo, t_order *order)
+{
+	if (last_action == SLEEP)
+	{
+		pthread_mutex_lock(&philo->rules->meal[order->left]);
+		philo->action = THINK;
+		pthread_mutex_unlock(&philo->rules->meal[order->left]);
+		print_action(philo, "is thinking");
+	}
+	else if (last_action == EAT)
+	{
+		pthread_mutex_lock(&philo->rules->meal[order->left]);
+		philo->action = SLEEP;
+		pthread_mutex_unlock(&philo->rules->meal[order->left]);
+		print_action(philo, "is sleeping");
+		philo_sleep(philo->rules->tts);
+	}
+}
+
 int	p_action(t_philo *philo)
 {
 	t_order		*order;
@@ -153,13 +106,8 @@ int	p_action(t_philo *philo)
 		return (1);
 	order = philo->order;
 	last_action = philo->action;
-	if (last_action == SLEEP)
-	{
-		pthread_mutex_lock(&philo->rules->meal[order->left]);
-		philo->action = THINK;
-		pthread_mutex_unlock(&philo->rules->meal[order->left]);
-		print_action(philo, "is thinking");
-	}
+	if (last_action == SLEEP || last_action == EAT)
+		think_sleep(last_action, philo, order);
 	else if (last_action == THINK)
 	{
 		if (philo->no % 2)
@@ -171,14 +119,6 @@ int	p_action(t_philo *philo)
 	{
 		if (philo->left && philo->right)
 			p_eat(philo, order);
-	}
-	else if (last_action == EAT)
-	{
-		pthread_mutex_lock(&philo->rules->meal[order->left]);
-		philo->action = SLEEP;
-		pthread_mutex_unlock(&philo->rules->meal[order->left]);
-		print_action(philo, "is sleeping");
-		philo_sleep(philo->rules->tts);
 	}
 	return (0);
 }
