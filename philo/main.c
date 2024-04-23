@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 03:35:44 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 15:14:31 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,12 @@ void	*routine(void *philo)
 	status = ((t_philo *) philo)->status;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
 	meals = ((t_philo *) philo)->meals;
-	if (((t_philo *) philo)->no % 2 == 1)
+	if (((t_philo *) philo)->no % 2 == 0)
 		usleep(1);
 	while (status == ALIVE && meals != must_eat)
 	{
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
+		printf("%d\n", ((t_philo *) philo)->rules->philo_no);
 		if (((t_philo *) philo)->rules->philo_no)
 		{
 			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
@@ -107,6 +108,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < rules->no_philo)
 		pthread_join(philo[i++].thread, NULL);
+	while (1)
+		if (monitor(philo, rules))
+			break ;
 	i = 0;
 	while (i < rules->no_philo)
 	{

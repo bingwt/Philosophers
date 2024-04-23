@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 02:32:26 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 15:18:45 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,24 @@ long	time_ms(long start)
 	return (timestamp);
 }
 
+void	philo_sleep(long milliseconds)
+{
+	long	start;
+
+	start = time_ms(0);
+	while ((time_ms(0) - start) < milliseconds)
+		usleep(500);
+}
+
 int	check_status(t_philo *philo)
 {
-	if (time_ms(philo->last_meal) >= philo->rules->ttd)
+//	printf("current time: %ld\n", time_ms(0));
+//	printf("   last meal: %ld\n", philo->last_meal);
+//	printf("        diff: %ld\n", time_ms(philo->last_meal));
+	if (time_ms(0) - philo->last_meal >= philo->rules->ttd)
 	{
 		print_action(philo, "died");
+		philo->status = DEAD;
 		pthread_mutex_lock(&philo->rules->status);
 		philo->rules->philo_no = philo->no;
 		pthread_mutex_unlock(&philo->rules->status);
@@ -35,13 +48,19 @@ int	check_status(t_philo *philo)
 	return (0);
 }
 
-void	philo_sleep(long ms)
+int	monitor(t_philo *philo, t_rules *rules)
 {
 	int	i;
 
-	i = ms / 1500;
-	while (i--)
-		usleep(1500);
+	i = 0;
+	while (i < rules->no_philo)
+	{
+		if (check_status(&philo[i]))
+			return (1);
+		i++;
+	}
+	usleep(500);
+	return (0);
 }
 
 void	free_philo(t_philo *philo, t_rules *rules)

@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 12:57:43 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/23 14:20:01 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	p_take(t_philo *philo, t_order *order)
 		{
 			if (philo->rules->no_philo < 2)
 			{
-				usleep(philo->rules->ttd);
+				philo_sleep(philo->rules->ttd);
 				return ;
 			}
 			pthread_mutex_lock(&philo->rules->mutex[order->right]);
@@ -55,6 +55,8 @@ void	p_take(t_philo *philo, t_order *order)
 void	alt_take(t_philo *philo, t_order *order)
 {
 	philo->action = TAKE;
+	if (check_status(philo))
+			return ;
 	if (!philo->right)
 	{
 		pthread_mutex_lock(&philo->rules->mutex[order->right]);
@@ -80,9 +82,11 @@ void	alt_take(t_philo *philo, t_order *order)
 
 void	p_eat(t_philo *philo, t_order *order)
 {
+	if (check_status(philo))
+			return ;
 	philo->action = EAT;
 	print_action(philo, "is eating");
-	usleep(philo->rules->tte * 1000);
+	philo_sleep(philo->rules->tte);
 	philo->rules->forks[order->left] = 0;
 	philo->left = 0;
 	//print_action(philo, "has return a left fork");
@@ -107,6 +111,8 @@ int	p_action(t_philo *philo)
 	t_order		*order;
 	t_action	last_action;
 
+	if (check_status(philo))
+			return (1);
 	order = philo->order;
 	last_action = philo->action;
 	if (last_action == SLEEP)
@@ -130,7 +136,7 @@ int	p_action(t_philo *philo)
 	{
 		philo->action = SLEEP;
 		print_action(philo, "is sleeping");
-		usleep(philo->rules->tts * 1000);
+		philo_sleep(philo->rules->tts);
 	}
 	return (0);
 }
