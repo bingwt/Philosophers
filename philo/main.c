@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 01:44:34 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 01:49:21 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	main(int argc, char **argv)
 	t_philo	*philo;
 	int		i;
 
+	if (check_input(argc, argv))
+		return (1);
 	rules = r_init(argc, argv);
 	philo = p_init(argv, rules);
 	i = 0;
