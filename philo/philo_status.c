@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 01:11:54 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 01:20:27 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	free_philo(t_philo *philo, t_rules *rules)
 	}
 	free(philo);
 	free(rules->forks);
+	free(rules->meal);
 	free(rules->mutex);
 	free(rules);
 }
