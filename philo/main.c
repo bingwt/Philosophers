@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 01:09:08 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 01:44:34 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,17 @@ void	*routine(void *philo)
 	must_eat = ((t_philo *) philo)->rules->must_eat;
 	meals = ((t_philo *) philo)->meals;
 	if (((t_philo *) philo)->no % 2 == 0)
-		usleep(1);
+		philo_sleep(500);
 	while (status == ALIVE && meals != must_eat)
 	{
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);
 		status = ((t_philo *) philo)->status;
 		if (((t_philo *) philo)->rules->philo_no)
 		{
-		//	printf("%d -> %d\n", ((t_philo *) philo)->no, ((t_philo *) philo)->rules->philo_no);
 			pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
 			break ;
 		}
 		pthread_mutex_unlock(&((t_philo *) philo)->rules->status);
-	//	if (check_status((t_philo *) philo))
-	//		break ;
 		p_action((t_philo *) philo);
 		meals = ((t_philo *) philo)->meals;
 	}
@@ -96,8 +93,6 @@ int	main(int argc, char **argv)
 	t_philo	*philo;
 	int		i;
 
-//	if (check_input(argc, argv))
-//		return (1);
 	rules = r_init(argc, argv);
 	philo = p_init(argv, rules);
 	i = 0;
@@ -114,54 +109,7 @@ int	main(int argc, char **argv)
 		pthread_join(philo[i++].thread, NULL);
 	i = 0;
 	while (i < rules->no_philo)
-	{
-		pthread_mutex_destroy(&philo->rules->mutex[i]);
-		i++;
-	}
+		pthread_mutex_destroy(&philo->rules->mutex[i++]);
 	free_philo(philo, rules);
 	return (0);
 }
-
-//int	main(int argc, char **argv)
-//{
-//	t_rules	*rules;
-//	t_philo	*philo;
-//	int		i;
-//
-//	if (argc < 5)
-//	{
-//		printf("Please provide at least 4 argument!!");
-//		return (1);
-//	}
-//	rules = r_init(argc, argv);
-//	philo = p_init(argv, rules);
-//	i = 0;
-//	while (i < rules->no_philo)
-//	{
-//		pthread_create(&philo[i].thread_id, NULL, routine, (void *) &philo[i]);
-//		i++;
-//	}
-//	i = 0;
-//	while (i < rules->no_philo)
-//		pthread_join(philo[i++].thread_id, NULL);
-//	return (0);
-//}
-//
-//int	main(int argc, char **argv)
-//{
-//	t_rules	*rules;
-//	t_philo	*philo;
-//	int		i;
-//
-//	if (argc < 5)
-//	{
-//		printf("Please provide at least 4 argument!!");
-//		return (1);
-//	}
-//	rules = r_init(argc, argv);
-//	philo = p_init(argv, rules);
-//	i = 0;
-//	while (i < rules->no_philo)
-//		routine((void *)&philo[i++]);
-//	return (0);
-//}
