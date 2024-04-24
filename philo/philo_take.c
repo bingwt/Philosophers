@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 02:43:52 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 14:59:42 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 22:17:40 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	take_right(t_philo *philo, t_order *order)
 	philo->right = 1;
 	if (check_status(philo))
 	{
+		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
 		pthread_mutex_unlock(&philo->rules->mutex[order->right]);
 		return (1);
 	}

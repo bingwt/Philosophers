@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 15:00:04 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 22:22:41 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ void	p_eat(t_philo *philo, t_order *order)
 		pthread_mutex_lock(&philo->rules->meal[philo->id]);
 		philo->status = FULL;
 		pthread_mutex_unlock(&philo->rules->meal[philo->id]);
-		pthread_mutex_lock(&philo->rules->print);
-		pthread_mutex_unlock(&philo->rules->print);
 		return ;
 	}
 }
