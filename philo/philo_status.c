@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:55:00 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 14:46:33 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ void	free_philo(t_philo *philo, t_rules *rules)
 	{
 		free(philo[i].order);
 		i++;
+	}
+	pthread_mutex_destroy(&philo->rules->print);
+	pthread_mutex_destroy(&philo->rules->status);
+	i = 0;
+	while (i < rules->no_philo)
+	{
+		pthread_mutex_destroy(&philo->rules->meal[i++]);
+		pthread_mutex_destroy(&philo->rules->mutex[i++]);
 	}
 	free(philo);
 	free(rules->forks);

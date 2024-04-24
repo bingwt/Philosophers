@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:20:50 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 14:18:49 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ int	main(int argc, char **argv)
 	while (i < rules->no_philo)
 		pthread_join(philo[i++].thread, NULL);
 	i = 0;
-	while (i < rules->no_philo)
-		pthread_mutex_destroy(&philo->rules->mutex[i++]);
 	free_philo(philo, rules);
 	return (0);
 }

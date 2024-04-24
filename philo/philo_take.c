@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 02:43:52 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:47:26 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 14:59:42 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ int	take_right(t_philo *philo, t_order *order)
 		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
 		return (1);
 	}
-	if (check_status(philo))
-	{
-		pthread_mutex_unlock(&philo->rules->mutex[order->left]);
-		return (1);
-	}
 	pthread_mutex_lock(&philo->rules->mutex[order->right]);
 	philo->rules->forks[order->right] = 1;
 	philo->right = 1;
+	if (check_status(philo))
+	{
+		pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+		return (1);
+	}
 	print_action(philo, "has taken a fork");
 	return (0);
 }
