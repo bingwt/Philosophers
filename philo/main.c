@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 14:18:49 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 20:19:48 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,13 @@ int	handle_error(t_error error)
 	else if (error == TOO_MANY_ARGS)
 		printf("Please provide no more than 5 arguments!!!\n");
 	else if (error == NAN)
-		printf("Please provide only numeric int inputs!!!\n");
+		printf("Please provide only  inputs!!!\n");
+	else if (error == MIN_PHILO)
+		printf("Please provide at least 1 philo!!!\n");
+	else if (error == MAX_PHILO)
+		printf("Please provide no more than 200 philos!!!\n");
+	else if (error == MEALS)
+		printf("Please provide at least 1 meal!!!\n");
 	return (1);
 }
 
@@ -57,6 +63,12 @@ int	check_input(int argc, char **argv)
 			i++;
 		}
 	}
+	if (ft_atol(argv[1]) <= 0)
+		return (handle_error(MIN_PHILO));
+	if (ft_atol(argv[1]) > 200)
+		return (handle_error(MAX_PHILO));
+	if (argc == 6 && ft_atol(argv[5]) <= 0)
+		return (handle_error(MEALS));
 	return (0);
 }
 
@@ -69,6 +81,8 @@ void	*routine(void *philo)
 	status = ((t_philo *) philo)->status;
 	must_eat = ((t_philo *) philo)->rules->must_eat;
 	meals = ((t_philo *) philo)->meals;
+//	if (((t_philo *) philo)->id % 2 == 0)
+//		usleep(100);
 	while (status == ALIVE && meals != must_eat)
 	{
 		pthread_mutex_lock(&((t_philo *) philo)->rules->status);

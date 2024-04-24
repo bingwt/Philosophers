@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 02:45:10 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 20:17:09 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ typedef enum e_error
 {
 	NOT_ENOUGH_ARGS,
 	TOO_MANY_ARGS,
+	MIN_PHILO,
+	MAX_PHILO,
+	MEALS,
 	NAN,
 }	t_error;
 
