@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/23 21:10:29 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/24 22:57:16 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_rules	*r_init(int argc, char **argv)
 	rules->start = time_ms(0);
 	rules->forks = ft_calloc(no, sizeof(int));
 	rules->meal = ft_calloc(no, sizeof(pthread_mutex_t));
-	rules->mutex = ft_calloc(no, sizeof(pthread_mutex_t));
+	rules->mutex = ft_calloc(no + 1, sizeof(pthread_mutex_t));
 	if (argc >= 6)
 		rules->must_eat = ft_atol(argv[5]);
 	else
