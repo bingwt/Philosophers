@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 22:22:41 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/25 18:54:59 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ void	p_eat(t_philo *philo, t_order *order)
 	pthread_mutex_lock(&philo->rules->meal[philo->id]);
 	philo->action = EAT;
 	pthread_mutex_unlock(&philo->rules->meal[philo->id]);
+	pthread_mutex_lock(&philo->rules->meal[philo->id]);
+	philo->last_meal = time_ms(0);
+	pthread_mutex_unlock(&philo->rules->meal[philo->id]);
 	print_action(philo, "is eating");
 	philo_sleep(philo->rules->tte);
 	philo->rules->forks[order->left] = 0;
@@ -63,9 +66,6 @@ void	p_eat(t_philo *philo, t_order *order)
 	philo->rules->forks[order->right] = 0;
 	philo->right = 0;
 	pthread_mutex_unlock(&philo->rules->mutex[order->right]);
-	pthread_mutex_lock(&philo->rules->meal[philo->id]);
-	philo->last_meal = time_ms(0);
-	pthread_mutex_unlock(&philo->rules->meal[philo->id]);
 	philo->meals++;
 	if (philo->meals == philo->rules->must_eat)
 	{
