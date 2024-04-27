@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 22:57:16 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 04:01:22 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,59 +53,6 @@ long	ft_atol(const char *str)
 	return (value * neg);
 }
 
-t_rules	*r_init(int argc, char **argv)
-{
-	int		no;
-	t_rules	*rules;
-
-	no = ft_atol(argv[1]);
-	rules = ft_calloc(1, sizeof(t_rules));
-	rules->no_philo = no;
-	rules->ttd = ft_atol(argv[2]);
-	rules->tte = ft_atol(argv[3]);
-	rules->tts = ft_atol(argv[4]);
-	rules->start = time_ms(0);
-	rules->forks = ft_calloc(no, sizeof(int));
-	rules->meal = ft_calloc(no, sizeof(pthread_mutex_t));
-	rules->mutex = ft_calloc(no + 1, sizeof(pthread_mutex_t));
-	if (argc >= 6)
-		rules->must_eat = ft_atol(argv[5]);
-	else
-		rules->must_eat = -1;
-	while (no--)
-	{
-		pthread_mutex_init(&rules->meal[no], NULL);
-		pthread_mutex_init(&rules->mutex[no], NULL);
-	}
-	return (rules);
-}
-
-t_philo	*p_init(char **argv, t_rules *rules)
-{
-	int		id;
-	t_philo	*philo;
-	t_order	*order;
-
-	id = ft_atol(argv[1]);
-	philo = ft_calloc(id, sizeof(t_philo));
-	while (id--)
-	{
-		order = ft_calloc(1, sizeof(t_order));
-		order->left = id;
-		if (id == rules->no_philo - 1)
-			order->right = 0;
-		else
-			order->right = id + 1;
-		philo[id].id = id;
-		philo[id].no = id + 1;
-		philo[id].last_meal = rules->start;
-		philo[id].tod = rules->start + rules->ttd;
-		philo[id].order = order;
-		philo[id].rules = rules;
-	}
-	return (philo);
-}
-
 long	time_ms(long start)
 {
 	struct timeval	s_time;
@@ -114,4 +61,20 @@ long	time_ms(long start)
 	gettimeofday(&s_time, NULL);
 	timestamp = ((s_time.tv_sec * 1000) + (s_time.tv_usec / 1000)) - start;
 	return (timestamp);
+}
+
+void	print_action(t_philo *philo, char *str)
+{
+	pthread_mutex_lock(&philo->rules->print);
+	printf("%ld %d %s\n", time_ms(philo->rules->start), philo->no, str);
+	pthread_mutex_unlock(&philo->rules->print);
+}
+
+void	philo_sleep(long milliseconds)
+{
+	long	start;
+
+	start = time_ms(0);
+	while ((time_ms(0) - start) < milliseconds)
+		usleep(500);
 }

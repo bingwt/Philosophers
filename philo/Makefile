@@ -6,7 +6,7 @@
 #    By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 15:19:54 by btan              #+#    #+#              #
-#    Updated: 2024/04/25 04:11:07 by btan             ###   ########.fr        #
+#    Updated: 2024/04/28 04:51:46 by btan             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,9 @@ INCLUDES = .
 
 SRCS = philo_utils.c \
 	   philo_errors.c \
+	   philo_init.c \
+	   philo_action.c \
 	   philo_status.c \
-	   philo_take.c \
-	   philo_actions.c \
 	   main.c
 
 CC = cc

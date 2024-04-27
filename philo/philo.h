@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/25 04:10:21 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 04:48:50 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,31 +56,29 @@ typedef struct s_rules
 	int				philo_no;
 	pthread_mutex_t	print;
 	pthread_mutex_t	status;
-	pthread_mutex_t	*meal;
-	pthread_mutex_t	*mutex;
+	pthread_mutex_t	*f_mutex;
 }	t_rules;
 
 typedef struct s_order
 {
-	int	left;
-	int	right;
+	int	first;
+	int	second;
 }	t_order;
 
 typedef struct s_philo
 {
-	int			id;
-	int			no;
-	int			meals;
-	int			left;
-	int			right;
-	long		last_meal;
-	long		tod;
-	long		ts;
-	t_action	action;
-	t_status	status;
-	t_order		*order;
-	t_rules		*rules;
-	pthread_t	thread;
+	int				id;
+	int				no;
+	int				meals;
+	int				first;
+	int				second;
+	long			last_meal;
+	t_action		action;
+	t_status		status;
+	t_order			*order;
+	t_rules			*rules;
+	pthread_mutex_t	p_mutex;
+	pthread_t		thread;
 }	t_philo;
 
 void	*ft_calloc(size_t nmemb, size_t size);
@@ -98,6 +96,6 @@ int		alt_left(t_philo *philo, t_order *order);
 int		monitor(t_philo *philo, t_rules *rules);
 void	free_philo(t_philo *philo, t_rules *rules);
 void	print_action(t_philo *philo, char *str);
-int		p_action(t_philo *philo);
+int		p_action(t_philo *philo, t_rules *rules);
 
 #endif
