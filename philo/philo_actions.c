@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:00:02 by btan              #+#    #+#             */
-/*   Updated: 2024/04/25 18:54:59 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 18:19:08 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,11 @@ void	p_take(t_philo *philo, t_order *order)
 		return ;
 	if (!philo->left)
 	{
-		if (take_left(philo, order))
+		if (take_first(philo, order))
 			return ;
 		if (philo->left)
 		{
-			if (take_right(philo, order))
-				return ;
-		}
-	}
-}
-
-void	alt_take(t_philo *philo, t_order *order)
-{
-	pthread_mutex_lock(&philo->rules->meal[philo->id]);
-	philo->action = TAKE;
-	pthread_mutex_unlock(&philo->rules->meal[philo->id]);
-	if (check_status(philo))
-		return ;
-	if (!philo->right)
-	{
-		if (alt_right(philo, order))
-			return ;
-		if (philo->right)
-		{
-			if (alt_left(philo, order))
+			if (take_second(philo, order))
 				return ;
 		}
 	}
@@ -60,12 +41,12 @@ void	p_eat(t_philo *philo, t_order *order)
 	pthread_mutex_unlock(&philo->rules->meal[philo->id]);
 	print_action(philo, "is eating");
 	philo_sleep(philo->rules->tte);
-	philo->rules->forks[order->left] = 0;
+	philo->rules->forks[order->first] = 0;
 	philo->left = 0;
-	pthread_mutex_unlock(&philo->rules->mutex[order->left]);
-	philo->rules->forks[order->right] = 0;
+	pthread_mutex_unlock(&philo->rules->mutex[order->first]);
+	philo->rules->forks[order->second] = 0;
 	philo->right = 0;
-	pthread_mutex_unlock(&philo->rules->mutex[order->right]);
+	pthread_mutex_unlock(&philo->rules->mutex[order->second]);
 	philo->meals++;
 	if (philo->meals == philo->rules->must_eat)
 	{
@@ -107,12 +88,7 @@ int	p_action(t_philo *philo)
 	if (last_action == SLEEP || last_action == EAT)
 		think_sleep(last_action, philo);
 	else if (last_action == THINK)
-	{
-		if (philo->no % 2)
-			p_take(philo, order);
-		else
-			alt_take(philo, order);
-	}
+		p_take(philo, order);
 	else if (last_action == TAKE)
 	{
 		if (philo->left && philo->right)

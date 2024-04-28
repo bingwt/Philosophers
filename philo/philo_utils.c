@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/24 22:57:16 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 18:16:47 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,26 @@ t_rules	*r_init(int argc, char **argv)
 	return (rules);
 }
 
+t_order	*order_init(int id, t_rules *rules)
+{
+	t_order	*order;
+	int		temp;
+
+	order = ft_calloc(1, sizeof(t_order));
+	order->first = id;
+	if (id == rules->no_philo - 1)
+		order->second = 0;
+	else
+		order->second = id + 1;
+	if (id % 2)
+	{
+		temp = order->first;
+		order->first = order->second;
+		order->second = temp;
+	}
+	return (order);
+}
+
 t_philo	*p_init(char **argv, t_rules *rules)
 {
 	int		id;
@@ -90,12 +110,7 @@ t_philo	*p_init(char **argv, t_rules *rules)
 	philo = ft_calloc(id, sizeof(t_philo));
 	while (id--)
 	{
-		order = ft_calloc(1, sizeof(t_order));
-		order->left = id;
-		if (id == rules->no_philo - 1)
-			order->right = 0;
-		else
-			order->right = id + 1;
+		order = order_init(id, rules);
 		philo[id].id = id;
 		philo[id].no = id + 1;
 		philo[id].last_meal = rules->start;

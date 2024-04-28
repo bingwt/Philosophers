@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/25 04:10:21 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 18:18:39 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef struct s_rules
 
 typedef struct s_order
 {
-	int	left;
-	int	right;
+	int	first;
+	int	second;
 }	t_order;
 
 typedef struct s_philo
@@ -91,8 +91,8 @@ long	time_ms(long start);
 void	philo_sleep(long ms);
 int		check_input(int argc, char **argv);
 int		check_status(t_philo *philo);
-int		take_left(t_philo *philo, t_order *order);
-int		take_right(t_philo *philo, t_order *order);
+int		take_first(t_philo *philo, t_order *order);
+int		take_second(t_philo *philo, t_order *order);
 int		alt_right(t_philo *philo, t_order *order);
 int		alt_left(t_philo *philo, t_order *order);
 int		monitor(t_philo *philo, t_rules *rules);
