@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/28 23:59:30 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:26:49 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,20 @@ int	check_status(t_philo *philo, t_rules *rules)
 	pthread_mutex_unlock(&philo->mutex);
 	return (0);
 }
-//int	monitor(t_philo *philo, t_rules *rules)
-//{
-//	int	i;
-//
-//	i = 0;
-//	while (i < rules->no_philo)
-//	{
-//		if (check_status(&philo[i]))
-//			return (1);
-//		i++;
-//	}
-//	return (0);
-//}
+
+int	monitor(t_philo *philo, t_rules *rules)
+{
+	int	i;
+
+	i = 0;
+	while (i < rules->no_philo)
+	{
+		if (check_status(&philo[i], rules))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	free_philo(t_philo *philo, t_rules *rules)
 {

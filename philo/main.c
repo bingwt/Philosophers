@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 00:03:25 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:26:21 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 void	*routine(void *p)
 {
-	t_philo *philo;
-	t_rules *rules;
+	t_philo 	*philo;
+	t_rules 	*rules;
+	t_status	status;
 
 	philo = (t_philo *) p;
 	rules = philo->rules;
-	pthread_mutex_lock(&philo->mutex);
-	while (philo->status == ALIVE)
+	status = philo->status;
+	while (status == ALIVE)
 	{
-		pthread_mutex_unlock(&philo->mutex);
 		p_action(philo, rules);
+		status = philo->status;
 	}
 	return (NULL);
 }
@@ -46,9 +47,9 @@ int	main(int argc, char **argv)
 		pthread_create(&thread[i], NULL, routine, &philo[i]);
 		i++;
 	}
-//	while (1)
-//		if (monitor(philo, rules))
-//			break ;
+	while (1)
+		if (monitor(philo, rules))
+			break ;
 	i = 0;
 	while (i < rules->no_philo)
 		pthread_join(thread[i++], NULL);
