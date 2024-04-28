@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 03:49:13 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:51:51 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 06:01:15 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int	p_sleep(t_philo *philo, t_rules *rules)
 	order = philo->order;
 	philo->action = SLEEP;
 	print_action(philo, "is sleeping");
-	print_action(philo, "has returned a fork");
 	philo->first = 0;
 	pthread_mutex_unlock(&rules->mutex[order->first]);
-	print_action(philo, "has returned a fork");
 	philo->second = 0;
 	pthread_mutex_unlock(&rules->mutex[order->second]);
 	philo_sleep(rules->tts);
@@ -76,7 +74,6 @@ int	p_action(t_philo *philo, t_rules *rules)
 		return (p_eat(philo, rules));
 	else if (philo->first && !philo->second)
 	{
-		print_action(philo, "has returned a fork");
 		philo->first = 0;
 		pthread_mutex_unlock(&rules->mutex[order->first]);
 		philo->action = THINK;

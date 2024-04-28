@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:42:13 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:59:39 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_status(t_philo *philo, t_rules *rules)
 	}
 	if (time_ms(philo->last_meal) == rules->ttd)
 	{
-		print_action(philo, "has died");
+		print_action(philo, "died");
 		pthread_mutex_lock(&rules->status);
 		rules->philo_no = philo->no;
 		pthread_mutex_unlock(&rules->status);
