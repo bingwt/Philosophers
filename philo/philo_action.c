@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 03:49:13 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 06:01:15 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 06:42:57 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	p_take(t_philo *philo, t_order *order, t_rules *rules)
 	pthread_mutex_lock(&rules->mutex[order->first]);
 	philo->first = 1;
 	print_action(philo, "has taken a fork");
-	if (philo->first)
+	if (philo->first && rules->no_philo > 1)
 	{
 		pthread_mutex_lock(&rules->mutex[order->second]);
 		philo->second = 1;

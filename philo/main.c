@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:54:53 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 06:12:05 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	*routine(void *p)
 		status = philo->status;
 	}
 	return_forks(philo, rules);
-	print_action(philo, "is done");
 	return (NULL);
 }
 
