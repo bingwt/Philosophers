@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 03:49:13 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:30:45 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:36:48 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	p_eat(t_philo *philo, t_rules *rules)
 	philo->meals++;
 	if (philo->meals == rules->must_eat)
 		philo->status = FULL;
+	philo->last_meal = time_ms(0);
 	pthread_mutex_unlock(&philo->mutex);
 	philo_sleep(rules->tte);
 

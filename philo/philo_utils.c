@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:44:14 by btan              #+#    #+#             */
-/*   Updated: 2024/04/28 04:01:22 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:43:49 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ long	time_ms(long start)
 
 void	print_action(t_philo *philo, char *str)
 {
+
+	pthread_mutex_lock(&philo->rules->status);
+	if (philo->rules->philo_no)
+	{
+		pthread_mutex_unlock(&philo->rules->status);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->rules->status);
 	pthread_mutex_lock(&philo->rules->print);
 	printf("%ld %d %s\n", time_ms(philo->rules->start), philo->no, str);
 	pthread_mutex_unlock(&philo->rules->print);

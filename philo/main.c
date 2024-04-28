@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:33:37 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:41:31 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@ void	*routine(void *p)
 	status = philo->status;
 	while (status == ALIVE)
 	{
+		pthread_mutex_lock(&rules->status);
+		if (rules->philo_no)
+		{
+			pthread_mutex_unlock(&rules->status);
+			break ;
+		}
+		pthread_mutex_unlock(&rules->status);
 		p_action(philo, rules);
 		status = philo->status;
 	}
