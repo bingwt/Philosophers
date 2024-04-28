@@ -6,16 +6,30 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:41:31 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:54:53 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	return_forks(t_philo *philo, t_rules *rules)
+{
+	if (philo->first)
+	{
+		philo->first = 0;
+		pthread_mutex_unlock(&rules->mutex[philo->order->first]);
+	}
+	if (philo->second)
+	{
+		philo->second = 0;
+		pthread_mutex_unlock(&rules->mutex[philo->order->second]);
+	}
+}
+
 void	*routine(void *p)
 {
-	t_philo 	*philo;
-	t_rules 	*rules;
+	t_philo		*philo;
+	t_rules		*rules;
 	t_status	status;
 
 	philo = (t_philo *) p;
@@ -33,26 +47,17 @@ void	*routine(void *p)
 		p_action(philo, rules);
 		status = philo->status;
 	}
-	if (philo->first)
-	{
-		philo->first = 0;
-		pthread_mutex_unlock(&rules->mutex[philo->order->first]);
-	}
-	if (philo->second)
-	{
-		philo->second = 0;
-		pthread_mutex_unlock(&rules->mutex[philo->order->second]);
-	}
+	return_forks(philo, rules);
 	print_action(philo, "is done");
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
-	t_rules	*rules;
-	t_philo	*philo;
+	t_rules		*rules;
+	t_philo		*philo;
 	pthread_t	*thread;
-	int		i;
+	int			i;
 
 	if (check_input(argc, argv))
 		return (1);

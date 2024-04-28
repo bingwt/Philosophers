@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 03:49:13 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:36:48 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:51:51 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	p_think(t_philo *philo)
 
 int	p_take(t_philo *philo, t_order *order, t_rules *rules)
 {
-//	print_action(philo, "is trying to take a fork");
 	philo->action = TAKE;
 	pthread_mutex_lock(&rules->mutex[order->first]);
 	philo->first = 1;
@@ -46,7 +45,6 @@ int	p_eat(t_philo *philo, t_rules *rules)
 	philo->last_meal = time_ms(0);
 	pthread_mutex_unlock(&philo->mutex);
 	philo_sleep(rules->tte);
-
 	return (1);
 }
 
@@ -72,7 +70,6 @@ int	p_action(t_philo *philo, t_rules *rules)
 	t_order	*order;
 
 	order = philo->order;
-//	printf("action: %d\n",  philo->action);
 	if (philo->action == THINK)
 		return (p_take(philo, order, rules));
 	if (philo->first && philo->second && philo->action == TAKE)
@@ -90,4 +87,3 @@ int	p_action(t_philo *philo, t_rules *rules)
 		return (p_think(philo));
 	return (0);
 }
-
