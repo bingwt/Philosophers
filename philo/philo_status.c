@@ -6,12 +6,23 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:50:15 by btan              #+#    #+#             */
-/*   Updated: 2024/04/28 14:57:27 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 23:59:30 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	check_status(t_philo *philo, t_rules *rules)
+{
+	pthread_mutex_lock(&philo->mutex);
+	if (philo->meals == rules->must_eat)
+	{
+		pthread_mutex_unlock(&philo->mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->mutex);
+	return (0);
+}
 //int	monitor(t_philo *philo, t_rules *rules)
 //{
 //	int	i;
