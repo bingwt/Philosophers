@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/28 04:48:50 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 14:55:25 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_rules
 	int				philo_no;
 	pthread_mutex_t	print;
 	pthread_mutex_t	status;
-	pthread_mutex_t	*f_mutex;
+	pthread_mutex_t	*mutex;
 }	t_rules;
 
 typedef struct s_order
@@ -77,7 +77,7 @@ typedef struct s_philo
 	t_status		status;
 	t_order			*order;
 	t_rules			*rules;
-	pthread_mutex_t	p_mutex;
+	pthread_mutex_t	mutex;
 	pthread_t		thread;
 }	t_philo;
 
