@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 00:00:07 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:56:56 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ typedef struct s_philo
 	t_order			*order;
 	t_rules			*rules;
 	pthread_mutex_t	mutex;
-	pthread_t		thread;
 }	t_philo;
 
 void	*ft_calloc(size_t nmemb, size_t size);
