@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:22 by btan              #+#    #+#             */
-/*   Updated: 2024/04/29 05:26:21 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/29 05:33:37 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@ void	*routine(void *p)
 		p_action(philo, rules);
 		status = philo->status;
 	}
+	if (philo->first)
+	{
+		philo->first = 0;
+		pthread_mutex_unlock(&rules->mutex[philo->order->first]);
+	}
+	if (philo->second)
+	{
+		philo->second = 0;
+		pthread_mutex_unlock(&rules->mutex[philo->order->second]);
+	}
+	print_action(philo, "is done");
 	return (NULL);
 }
 
