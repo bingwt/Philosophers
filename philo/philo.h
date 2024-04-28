@@ -6,7 +6,7 @@
 /*   By: btan <btan@student.42singapore.sg>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:20:37 by btan              #+#    #+#             */
-/*   Updated: 2024/04/28 14:55:25 by btan             ###   ########.fr       */
+/*   Updated: 2024/04/28 23:32:01 by btan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef enum e_error
 
 typedef enum e_action
 {
+	SLEEP,
 	THINK,
 	TAKE,
-	EAT,
-	SLEEP
+	EAT
 }	t_action;
 
 typedef enum e_status
